@@ -7,11 +7,13 @@ import OutputPanel from "../components/OutputPanel";
 import ChallengePanel from "../components/ChallengePanel";
 import DifficultyBadge from "../components/DifficultyBadge";
 import { api } from "../lib/api";
+import { useProgress } from "../hooks/useProgress";
 import type { Challenge, ExecutionResult, TestSummary } from "../types";
 
 export default function ChallengePage() {
   const { state } = useLocation() as { state: { challenge: Challenge } | null };
   const navigate = useNavigate();
+  const { markCompleted, isCompleted } = useProgress();
 
   const challenge: Challenge | null = state?.challenge ?? null;
 
@@ -59,6 +61,9 @@ export default function ChallengePage() {
       const result = await api.testCode(challenge!.language, code, challenge!.test_cases);
       setTestResult(result);
       setSubmitStatus(result.all_passed ? "pass" : "fail");
+      if (result.all_passed) {
+        markCompleted(challenge!.id);
+      }
     } catch {
       setTestResult(null);
     } finally {
@@ -93,6 +98,12 @@ export default function ChallengePage() {
           <div className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 px-2.5 py-1 rounded-full">
             <CheckCircle2 className="h-3.5 w-3.5" />
             All tests passed!
+          </div>
+        )}
+        {submitStatus !== "pass" && isCompleted(challenge.id) && (
+          <div className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 px-2.5 py-1 rounded-full">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Completed
           </div>
         )}
         {submitStatus === "fail" && (

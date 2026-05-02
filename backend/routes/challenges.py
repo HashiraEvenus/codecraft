@@ -19,24 +19,44 @@ class ChallengeRequest(BaseModel):
     topic: str
     difficulty: str
     language: str = "python"
+    exclude_ids: list[str] = []
 
 
-def _pick_hardcoded(topic: str, difficulty: str, language: str):
+def _pick_hardcoded(topic: str, difficulty: str, language: str, exclude_ids: set[str]):
     """Return a random hardcoded challenge that matches the filters, or None."""
-    matches = [
+    exact_matches = [
         c for c in CHALLENGES
         if c["topic"] == topic
         and c["difficulty"] == difficulty
         and c["language"] == language
     ]
-    if not matches:
+    if exact_matches:
+        matches = [c for c in exact_matches if c["id"] not in exclude_ids]
+    else:
         # Relax language filter — most challenges are Python-only for now
-        matches = [
+        fallback_matches = [
             c for c in CHALLENGES
             if c["topic"] == topic
             and c["difficulty"] == difficulty
         ]
+        matches = [c for c in fallback_matches if c["id"] not in exclude_ids]
     return random.choice(matches) if matches else None
+
+
+def _has_matching_challenge(topic: str, difficulty: str, language: str):
+    exact_match = any(
+        c for c in CHALLENGES
+        if c["topic"] == topic
+        and c["difficulty"] == difficulty
+        and c["language"] == language
+    )
+    if exact_match:
+        return True
+    return any(
+        c for c in CHALLENGES
+        if c["topic"] == topic
+        and c["difficulty"] == difficulty
+    )
 
 
 @router.get("/topics")
@@ -54,9 +74,20 @@ def get_library():
             "topic": c["topic"],
             "difficulty": c["difficulty"],
             "language": c["language"],
+            "concept_count": len(c.get("concepts", [])),
+            "test_count": len(c.get("test_cases", [])),
         }
         for c in CHALLENGES
     ]
+
+
+@router.get("/library/{challenge_id}")
+def get_library_challenge(challenge_id: str):
+    for challenge in CHALLENGES:
+        if challenge["id"] == challenge_id:
+            return challenge
+
+    raise HTTPException(status_code=404, detail="Challenge not found")
 
 
 @router.post("/generate")
@@ -64,6 +95,7 @@ async def create_challenge(req: ChallengeRequest):
     topic      = req.topic.lower().strip()
     difficulty = req.difficulty.lower().strip()
     language   = req.language.lower().strip()
+    exclude_ids = set(req.exclude_ids)
 
     valid_difficulties = {"beginner", "intermediate", "advanced"}
     if difficulty not in valid_difficulties:
@@ -73,9 +105,15 @@ async def create_challenge(req: ChallengeRequest):
     if language not in valid_languages:
         raise HTTPException(status_code=400, detail=f"language must be one of {valid_languages}")
 
-    challenge = _pick_hardcoded(topic, difficulty, language)
+    challenge = _pick_hardcoded(topic, difficulty, language, exclude_ids)
     if challenge:
         return challenge
+
+    if exclude_ids and _has_matching_challenge(topic, difficulty, language):
+        raise HTTPException(
+            status_code=409,
+            detail="You have completed every matching challenge. Enable completed exercises to practice them again."
+        )
 
     raise HTTPException(
         status_code=404,

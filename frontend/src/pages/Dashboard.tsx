@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Brackets, Cpu, Database, Layers, CheckCircle2, Terminal,
-  Sparkles, Loader2, AlertCircle,
+  Sparkles, Loader2, AlertCircle, BookOpen,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { api } from "../lib/api";
@@ -27,12 +27,13 @@ const LANGUAGES: { value: Language; label: string }[] = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { progress, recordChallenge } = useProgress();
+  const { progress } = useProgress();
 
   const [topics, setTopics] = useState<Topic[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>("");
   const [difficulty, setDifficulty] = useState<Difficulty>("beginner");
   const [language, setLanguage] = useState<Language>("python");
+  const [includeCompleted, setIncludeCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -47,11 +48,15 @@ export default function Dashboard() {
     setError("");
 
     try {
-      const challenge = await api.generateChallenge(selectedTopic, difficulty, language);
-      recordChallenge();
+      const excludedIds = includeCompleted ? [] : progress.completedChallengeIds;
+      const challenge = await api.generateChallenge(selectedTopic, difficulty, language, excludedIds);
       navigate("/challenge", { state: { challenge } });
     } catch {
-      setError("Failed to generate challenge. Is the backend running?");
+      setError(
+        includeCompleted
+          ? "Failed to generate challenge. Is the backend running?"
+          : "No fresh matching challenge found. Try enabling completed exercises or choosing another topic."
+      );
     } finally {
       setLoading(false);
     }
@@ -72,12 +77,16 @@ export default function Dashboard() {
 
         <div className="card p-4 flex items-start gap-3 text-sm text-zinc-300">
           <Sparkles className="h-4 w-4 text-violet-400 mt-0.5 shrink-0" />
-          <div>
+          <div className="flex-1">
             <div className="font-medium text-zinc-100">Local-first personal practice</div>
             <p className="text-zinc-500 mt-1">
               AI-assisted challenges come from the bundled exercise library, and code runs on your own machine.
             </p>
           </div>
+          <Link to="/library" className="btn-outline text-xs flex items-center gap-1.5 shrink-0">
+            <BookOpen className="h-3.5 w-3.5" />
+            View Library
+          </Link>
         </div>
 
         {/* Topic selection */}
@@ -155,6 +164,22 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Practice mode */}
+        <label className="card p-4 flex items-start gap-3 cursor-pointer hover:border-zinc-700 transition-colors">
+          <input
+            type="checkbox"
+            checked={includeCompleted}
+            onChange={(event) => setIncludeCompleted(event.target.checked)}
+            className="mt-1 h-4 w-4 accent-violet-500"
+          />
+          <span>
+            <span className="block text-sm font-medium text-zinc-100">Include completed exercises</span>
+            <span className="block text-sm text-zinc-500 mt-1">
+              Keep this off for fresh practice. Turn it on when you want to retest solved challenges.
+            </span>
+          </span>
+        </label>
+
         {/* Error */}
         {error && (
           <div className="flex items-center gap-2 text-sm text-red-400 bg-red-950/20 border border-red-800/30 rounded-lg p-3">
@@ -183,8 +208,11 @@ export default function Dashboard() {
         </button>
 
         {/* Stats footer */}
-        <div className="text-center text-xs text-zinc-600">
-          {progress.totalCompleted} total challenges completed
+        <div className="text-center text-xs text-zinc-600 space-y-2">
+          <div>{progress.totalCompleted} total challenges completed</div>
+          <Link to="/library" className="text-violet-400 hover:text-violet-300 transition-colors">
+            Track progress in the exercise library
+          </Link>
         </div>
       </main>
     </div>

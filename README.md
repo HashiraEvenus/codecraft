@@ -10,6 +10,8 @@ It is meant to be free to use locally: no account creation, subscriptions, paywa
 - Generate a matching challenge from the bundled exercise library.
 - Solve it in the Monaco-based editor.
 - Run and test Python, JavaScript, or TypeScript locally.
+- Track completed exercises in the library view.
+- Skip completed exercises by default, with an option to include them again for review.
 - Review hints, solutions, concepts, and reference docs included with each challenge.
 - Grow the library over time by adding more exercises to `backend/challenges_data.py`.
 

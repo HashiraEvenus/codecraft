@@ -6,6 +6,7 @@ export interface Concept {
 }
 
 export interface Challenge {
+  id: string;
   title: string;
   description: string;
   starter_code: string;
@@ -53,9 +54,20 @@ export interface Topic {
   description: string;
 }
 
+export interface ChallengeSummary {
+  id: string;
+  title: string;
+  topic: string;
+  difficulty: Difficulty;
+  language: Language;
+  concept_count: number;
+  test_count: number;
+}
+
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 export type Language = "python" | "javascript" | "typescript";
 
 export interface UserProgress {
   totalCompleted: number;
+  completedChallengeIds: string[];
 }

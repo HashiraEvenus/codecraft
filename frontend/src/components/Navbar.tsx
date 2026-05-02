@@ -24,6 +24,11 @@ export default function Navbar({ rightSlot }: NavbarProps) {
               Dashboard
             </Link>
           )}
+          {pathname !== "/" && pathname !== "/library" && (
+            <Link to="/library" className="btn-ghost text-sm">
+              Library
+            </Link>
+          )}
           {rightSlot}
           {pathname === "/" && (
             <Link to="/dashboard" className="btn-primary text-sm">
