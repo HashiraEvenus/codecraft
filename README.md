@@ -4,6 +4,14 @@ CodeCraft is a local coding-practice app for keeping library knowledge, syntax, 
 
 It is meant to be free to use locally: no account creation, subscriptions, paywalls, or external challenge-generation credentials are required.
 
+## What it looks like 
+## Screenshots
+![Dashboard](<img width="2507" height="1315" alt="image" src="https://github.com/user-attachments/assets/d1bc51b0-390a-4c28-b1af-9fc33af8a10b" />)
+![Challenge Editor](<img width="2504" height="1272" alt="image" src="https://github.com/user-attachments/assets/e217c6a0-213a-4792-a7c2-ad4f47e7013a" />)
+![Exercise Library](<img width="2516" height="1279" alt="image" src="https://github.com/user-attachments/assets/1d6069f9-ee46-48da-9f3c-a071b9397ea6" />)
+
+
+
 ## What It Does
 
 - Pick a topic, difficulty, and language from the dashboard.
