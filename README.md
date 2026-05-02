@@ -6,7 +6,7 @@ It is meant to be free to use locally: no account creation, subscriptions, paywa
 
 ## What it looks like 
 ## Screenshots
-![Dashboard][./docs/screenshots/Dashboard.png](https://github.com/HashiraEvenus/codecraft/blob/cab0eff97ff11f1fbd06043766b076f8a1b28540/docs/Dashboard.png)
+![Dashboard][[./docs/screenshots/Dashboard.png](https://github.com/HashiraEvenus/codecraft/blob/cab0eff97ff11f1fbd06043766b076f8a1b28540/docs/Dashboard.png)](https://github.com/HashiraEvenus/codecraft/blob/main/docs/Dashboard.png?raw=true)
 ![Challenge Editor]([./docs/screenshots/code-editor.png](https://github.com/HashiraEvenus/codecraft/blob/cab0eff97ff11f1fbd06043766b076f8a1b28540/docs/code-editor.png))
 ![Exercise Library]([./docs/screenshots/Library.png](https://github.com/HashiraEvenus/codecraft/blob/cab0eff97ff11f1fbd06043766b076f8a1b28540/docs/Library.png))
 
