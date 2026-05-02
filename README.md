@@ -6,12 +6,9 @@ It is meant to be free to use locally: no account creation, subscriptions, paywa
 
 ## What it looks like 
 ## Screenshots
-![Dashboard](<img width="2512" height="1269" alt="code editor" src="https://github.com/user-attachments/assets/5e62b766-6d88-46a0-83d1-f9f15b7e604a" />
-)
-![Challenge Editor](<img width="2515" height="1281" alt="Screenshot 2026-05-02 123622" src="https://github.com/user-attachments/assets/909b657c-97e1-407b-8d9e-1bc61721a52c" />
-)
-![Exercise Library](<img width="2503" height="1276" alt="Screenshot 2026-05-02 123739" src="https://github.com/user-attachments/assets/cc4ab08b-9860-484e-a8ae-0ad0a2e309fe" />
-)
+![Dashboard](./docs/screenshots/Dashboard.png)
+![Challenge Editor](./docs/screenshots/code-editor.png)
+![Exercise Library](./docs/screenshots/Library.png)
 
 
 
