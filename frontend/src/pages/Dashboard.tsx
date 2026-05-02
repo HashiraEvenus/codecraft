@@ -75,7 +75,7 @@ export default function Dashboard() {
           <div>
             <div className="font-medium text-zinc-100">Local-first personal practice</div>
             <p className="text-zinc-500 mt-1">
-              Challenges use your own Gemini key, and code runs on your own machine.
+              AI-assisted challenges come from the bundled exercise library, and code runs on your own machine.
             </p>
           </div>
         </div>

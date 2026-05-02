@@ -4,8 +4,8 @@ import { Code2, Sparkles, Play, BookOpen, ArrowRight, CheckCircle2 } from "lucid
 const FEATURES = [
   {
     icon: Sparkles,
-    title: "AI-Generated Challenges",
-    body: "Generate fresh practice prompts locally using your own Gemini API key.",
+    title: "AI-Assisted Challenge Library",
+    body: "Practice with curated exercises without accounts, subscriptions, or external service credentials.",
   },
   {
     icon: Play,
@@ -21,9 +21,9 @@ const FEATURES = [
 
 const LOCAL_FEATURES = [
   "No hosted code execution bill",
-  "Your Gemini API key stays local",
+  "No accounts or paywalls",
   "Python, JavaScript, TypeScript",
-  "Hints and solutions included",
+  "Hints, solutions, and concepts included",
 ];
 
 function CodeMockup() {
@@ -132,7 +132,7 @@ export default function Landing() {
           <div className="mx-auto max-w-7xl text-center space-y-6">
             <div className="inline-flex items-center gap-2 text-xs font-medium text-violet-300 bg-violet-500/10 border border-violet-500/20 px-3 py-1.5 rounded-full">
               <Sparkles className="h-3.5 w-3.5" />
-              Local-first · AI-powered · Personal practice
+              Local-first · Free practice · Growing exercise library
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-none">
@@ -141,7 +141,7 @@ export default function Landing() {
             </h1>
 
             <p className="text-zinc-400 text-lg max-w-xl mx-auto leading-relaxed">
-              Practice with AI-generated challenges tailored to your topic and difficulty. Run code on your own machine and keep the app simple.
+              Practice with AI-assisted challenges matched to your topic and difficulty. Keep coding knowledge fresh without creating accounts or paying for access.
             </p>
 
             <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -188,14 +188,14 @@ export default function Landing() {
           <div className="mx-auto max-w-7xl">
             <div className="text-center mb-12 space-y-2">
               <h2 className="text-2xl sm:text-3xl font-bold text-zinc-50">Built for local use</h2>
-              <p className="text-zinc-400">Bring your own Gemini key and run everything from your machine.</p>
+              <p className="text-zinc-400">Use the bundled exercises, run everything from your machine, and expand the library over time.</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
               <div className="card p-6 space-y-5">
                 <div>
                   <h3 className="font-semibold text-zinc-50 text-lg">Personal Practice</h3>
-                  <p className="text-sm text-zinc-500 mt-1">No subscription layer. No per-run executor API.</p>
+                  <p className="text-sm text-zinc-500 mt-1">No login flow. No subscription layer. No per-run executor API.</p>
                 </div>
                 <ul className="space-y-2.5 text-sm">
                   {LOCAL_FEATURES.map((f) => (
@@ -214,7 +214,7 @@ export default function Landing() {
                 <h3 className="font-semibold text-zinc-50 text-lg">What you need</h3>
                 <div className="space-y-3 text-sm text-zinc-300">
                   <p>Install Python and Node if you want local execution for those languages.</p>
-                  <p>Add your Gemini API key to the backend `.env` file.</p>
+                  <p>Copy the example env files only if you need to adjust local runtime settings.</p>
                   <p>Run the backend and frontend locally, then practice from your browser.</p>
                 </div>
               </div>

@@ -7,7 +7,7 @@
 | Frontend framework | React + TypeScript + Vite | Fast DX, strong ecosystem, Vite build is fast |
 | Styling | Tailwind CSS v3 | Utility-first, no context switching, consistent dark theme |
 | Code editor | Monaco Editor (`@monaco-editor/react`) | Same engine as VS Code — syntax highlighting, IntelliSense, multi-language, theming out of the box. CodeMirror is lighter but Monaco wins on features for a coding platform |
-| AI generation | Google Gemini | Uses the user's own local API key for challenge generation |
+| Challenge source | Local challenge library | Uses AI-assisted, curated exercises from `backend/challenges_data.py`, so users do not need accounts, subscriptions, or external service credentials |
 | Code execution | Local subprocess runner | No hosted execution API, no per-run cost, useful for personal practice |
 | Backend | FastAPI (Python) | Simple local API for generation and execution |
 | Routing | React Router v6 | Standard, lightweight |
@@ -16,7 +16,7 @@
 
 ## Product Direction
 
-CodeCraft is a local-first personal practice tool, not a hosted SaaS. There is no pricing layer, Pro mode, hosted code execution, or license-key flow.
+CodeCraft is a local-first personal practice tool, not a hosted SaaS. There is no pricing layer, Pro mode, account system, hosted code execution, or license-key flow. The exercise library can grow over time by adding more challenge entries to `backend/challenges_data.py`.
 
 ## Code Execution Flow
 
@@ -29,14 +29,15 @@ Test validation: the backend appends `print(test_case_input)` to the user's code
 
 Execution happens on the same machine running the backend. This is convenient for personal use, but it is not safe for public untrusted users.
 
-## AI Challenge Generation
+## Challenge Generation
 
 ```
 User picks topic + difficulty + language → POST /api/challenges/generate
-→ Gemini prompt → JSON response with title, description, starter_code, test_cases, hint, solution
+→ backend selects a matching exercise from CHALLENGES
+→ JSON response with title, description, starter_code, test_cases, hint, solution
 ```
 
-The prompt instructs Gemini to return strict JSON only. Response is parsed and forwarded to the frontend.
+Challenges are stored in `backend/challenges_data.py`. The route filters by topic, difficulty, and language, then returns a random matching exercise. If there is no exact language match, it falls back to any challenge for that topic and difficulty.
 
 ## Local Runtime Configuration
 
@@ -52,5 +53,5 @@ LOCAL_RUN_TIMEOUT_SECONDS=5
 
 ## What You Need To Fill In
 
-1. **`backend/.env`** — `GEMINI_API_KEY`
+1. **`backend/.env`** — local execution commands and CORS URL if defaults do not work on your machine
 2. **`frontend/.env`** — `VITE_API_URL=http://localhost:8000`

@@ -1,12 +1,11 @@
-# CodeCraft — Local Setup Guide
+# CodeCraft - Local Setup Guide
 
-CodeCraft is a local AI coding-practice app. It uses your Gemini API key to generate challenges and runs code on your own machine.
+CodeCraft is a local coding-practice app. It uses an AI-assisted, curated exercise library to generate challenges and runs code on your own machine. Users can practice without creating accounts, paying for access, or providing challenge-generation credentials.
 
 ## Requirements
 
 - Python 3.10+
 - Node.js 18+
-- A Gemini API key from https://aistudio.google.com/app/apikey
 - Optional for TypeScript execution: `npx tsx` support
 
 ### Backend
@@ -21,7 +20,7 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+# Edit .env only if you need to override local execution commands or CORS
 uvicorn main:app --reload
 # Runs on http://localhost:8000
 ```
@@ -69,4 +68,4 @@ Code execution is local. Only run code you trust, because submitted code execute
 
 ## Open Source Usage
 
-Do not commit your `.env` files. Other users should add their own Gemini API key and run the app locally.
+Do not commit your `.env` files. Other users can copy the example env files and run the app locally without any external challenge-generation credentials.
