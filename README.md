@@ -7,8 +7,8 @@ It is meant to be free to use locally: no account creation, subscriptions, paywa
 ## What it looks like 
 ## Screenshots
 ![Dashboard](https://github.com/HashiraEvenus/codecraft/blob/main/docs/Dashboard.png?raw=true)
-![Challenge Editor]([./docs/screenshots/code-editor.png](https://github.com/HashiraEvenus/codecraft/blob/cab0eff97ff11f1fbd06043766b076f8a1b28540/docs/code-editor.png))
-![Exercise Library]([./docs/screenshots/Library.png](https://github.com/HashiraEvenus/codecraft/blob/cab0eff97ff11f1fbd06043766b076f8a1b28540/docs/Library.png))
+![Challenge Editor](https://github.com/HashiraEvenus/codecraft/blob/main/docs/code-editor.png?raw=true)
+![Exercise Library](https://github.com/HashiraEvenus/codecraft/blob/main/docs/Library.png?raw=true)
 
 
 
