@@ -41,7 +41,7 @@ export default function Dashboard() {
     api.getTopics().then(setTopics).catch(() => {});
   }, []);
 
-  async function handleGenerate() {
+  async function handleStartExercise() {
     if (!selectedTopic) return;
 
     setLoading(true);
@@ -54,8 +54,8 @@ export default function Dashboard() {
     } catch {
       setError(
         includeCompleted
-          ? "Failed to generate challenge. Is the backend running?"
-          : "No fresh matching challenge found. Try enabling completed exercises or choosing another topic."
+          ? "Could not start an exercise. Is the backend running?"
+          : "No fresh matching exercise found. Try enabling completed exercises or choosing another topic."
       );
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ export default function Dashboard() {
         <div className="space-y-1">
           <h1 className="text-2xl font-bold text-zinc-50">What will you build today?</h1>
           <p className="text-zinc-400 text-sm">
-            Pick a topic, set the difficulty, and generate a local practice challenge.
+            Pick a topic, set the difficulty, and start a local practice exercise.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export default function Dashboard() {
           <div className="flex-1">
             <div className="font-medium text-zinc-100">Local-first personal practice</div>
             <p className="text-zinc-500 mt-1">
-              AI-assisted challenges come from the bundled exercise library, and code runs on your own machine.
+              AI-assisted exercises come from the bundled library, and code runs on your own machine.
             </p>
           </div>
           <Link to="/library" className="btn-outline text-xs flex items-center gap-1.5 shrink-0">
@@ -175,7 +175,7 @@ export default function Dashboard() {
           <span>
             <span className="block text-sm font-medium text-zinc-100">Include completed exercises</span>
             <span className="block text-sm text-zinc-500 mt-1">
-              Keep this off for fresh practice. Turn it on when you want to retest solved challenges.
+              Keep this off for fresh practice. Turn it on when you want to retest solved exercises.
             </span>
           </span>
         </label>
@@ -188,21 +188,21 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Generate */}
+        {/* Start exercise */}
         <button
-          onClick={handleGenerate}
+          onClick={handleStartExercise}
           disabled={!selectedTopic || loading}
           className="btn-primary w-full py-3 text-base flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Generating your challenge…
+              Finding an exercise...
             </>
           ) : (
             <>
-              <Sparkles className="h-4 w-4" />
-              Generate Challenge
+              <BookOpen className="h-4 w-4" />
+              Start Exercise
             </>
           )}
         </button>
