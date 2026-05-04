@@ -2714,4 +2714,710 @@ CHALLENGES = [
         "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.splitlines",
     },
 
+    # ──────────────────────────────────────────────
+    # PYTHON — ADVANCED / COVERAGE EXPANSION
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "longest-unique-substring",
+        "topic": "arrays-strings",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Longest Unique Substring",
+        "description": (
+            "Write a function called `solution` that takes a string and returns the length "
+            "of the longest substring with no repeated characters.\n\n"
+            "Example:\n  solution('abcabcbb') -> 3  ('abc')\n  solution('bbbbb') -> 1"
+        ),
+        "starter_code": "def solution(text: str) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("abcabcbb")', "expected_output": "3"},
+            {"input": 'solution("bbbbb")', "expected_output": "1"},
+            {"input": 'solution("pwwkew")', "expected_output": "3"},
+            {"input": 'solution("")', "expected_output": "0"},
+        ],
+        "hint": "Use a sliding window with a left pointer and a dict mapping each character to its latest index.",
+        "solution": (
+            "def solution(text: str) -> int:\n"
+            "    seen = {}\n"
+            "    left = 0\n"
+            "    best = 0\n"
+            "    for right, char in enumerate(text):\n"
+            "        if char in seen and seen[char] >= left:\n"
+            "            left = seen[char] + 1\n"
+            "        seen[char] = right\n"
+            "        best = max(best, right - left + 1)\n"
+            "    return best"
+        ),
+        "concepts": [
+            {
+                "title": "Sliding Window",
+                "explanation": "A sliding window tracks a valid range with left and right pointers instead of rebuilding substrings repeatedly.",
+                "examples": [
+                    "left = 0",
+                    "for right, char in enumerate(text):",
+                    "    best = max(best, right - left + 1)",
+                ],
+                "watch_out": "Only move the left pointer forward. Moving it backward can make an invalid window look valid again.",
+            },
+            {
+                "title": "Last-Seen Index Map",
+                "explanation": "A dict can remember the most recent index where each character appeared.",
+                "examples": [
+                    "seen[char] = right",
+                    "if char in seen and seen[char] >= left:",
+                ],
+                "watch_out": "A repeated character before the current window should not shrink the current window.",
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+    },
+
+    {
+        "id": "lru-cache-simulation",
+        "topic": "data-structures",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "LRU Cache Simulation",
+        "description": (
+            "Write a function called `solution` that simulates a small least-recently-used cache. "
+            "It receives a capacity and a list of operations. Each operation is either "
+            "('put', key, value) or ('get', key). Return a list of values returned by get operations, "
+            "using -1 when the key is missing."
+        ),
+        "starter_code": "def solution(capacity: int, operations: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": "solution(2, [('put','a',1), ('put','b',2), ('get','a'), ('put','c',3), ('get','b'), ('get','c')])",
+                "expected_output": "[1, -1, 3]",
+            },
+            {
+                "input": "solution(1, [('put','x',10), ('put','y',20), ('get','x'), ('get','y')])",
+                "expected_output": "[-1, 20]",
+            },
+            {
+                "input": "solution(2, [('get','missing')])",
+                "expected_output": "[-1]",
+            },
+        ],
+        "hint": "Python dicts preserve insertion order. Move a key to the end whenever it is used, and evict the oldest key when the cache is too large.",
+        "solution": (
+            "def solution(capacity: int, operations: list) -> list:\n"
+            "    cache = {}\n"
+            "    results = []\n"
+            "    for op in operations:\n"
+            "        if op[0] == 'get':\n"
+            "            key = op[1]\n"
+            "            if key not in cache:\n"
+            "                results.append(-1)\n"
+            "            else:\n"
+            "                value = cache.pop(key)\n"
+            "                cache[key] = value\n"
+            "                results.append(value)\n"
+            "        else:\n"
+            "            _, key, value = op\n"
+            "            if key in cache:\n"
+            "                cache.pop(key)\n"
+            "            cache[key] = value\n"
+            "            if len(cache) > capacity:\n"
+            "                oldest = next(iter(cache))\n"
+            "                cache.pop(oldest)\n"
+            "    return results"
+        ),
+        "concepts": [
+            {
+                "title": "Insertion-Ordered Dictionaries",
+                "explanation": "Modern Python dicts preserve insertion order, which can be used to model oldest-to-newest ordering.",
+                "examples": [
+                    "cache.pop(key)",
+                    "cache[key] = value  # reinsert at the end",
+                ],
+                "watch_out": "Updating an existing key does not automatically move it to the end; pop and reinsert it.",
+            },
+            {
+                "title": "Evicting the Oldest Item",
+                "explanation": "next(iter(cache)) reads the first key in insertion order.",
+                "examples": [
+                    "oldest = next(iter(cache))",
+                    "cache.pop(oldest)",
+                ],
+                "watch_out": "Only call next(iter(cache)) when the cache is non-empty.",
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/collections.html#ordereddict-objects",
+    },
+
+    {
+        "id": "plugin-registry",
+        "topic": "oop",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Plugin Registry",
+        "description": (
+            "Create a small plugin system. Define `UppercasePlugin` and `ReversePlugin`, each with "
+            "a `run(text)` method. Then write `solution(plugin_names, text)` that applies the named "
+            "plugins in order and returns the final text. Supported names are 'upper' and 'reverse'."
+        ),
+        "starter_code": (
+            "class UppercasePlugin:\n"
+            "    pass\n\n"
+            "class ReversePlugin:\n"
+            "    pass\n\n"
+            "def solution(plugin_names: list, text: str) -> str:\n"
+            "    # Your code here\n"
+            "    pass"
+        ),
+        "test_cases": [
+            {"input": "solution(['upper'], 'hello')", "expected_output": "HELLO"},
+            {"input": "solution(['reverse'], 'hello')", "expected_output": "olleh"},
+            {"input": "solution(['upper', 'reverse'], 'hello')", "expected_output": "OLLEH"},
+            {"input": "solution([], 'CodeCraft')", "expected_output": "CodeCraft"},
+        ],
+        "hint": "Create a dictionary that maps plugin names to plugin instances, then loop through the requested names and call run().",
+        "solution": (
+            "class UppercasePlugin:\n"
+            "    def run(self, text: str) -> str:\n"
+            "        return text.upper()\n\n"
+            "class ReversePlugin:\n"
+            "    def run(self, text: str) -> str:\n"
+            "        return text[::-1]\n\n"
+            "def solution(plugin_names: list, text: str) -> str:\n"
+            "    registry = {\n"
+            "        'upper': UppercasePlugin(),\n"
+            "        'reverse': ReversePlugin(),\n"
+            "    }\n"
+            "    result = text\n"
+            "    for name in plugin_names:\n"
+            "        result = registry[name].run(result)\n"
+            "    return result"
+        ),
+        "concepts": [
+            {
+                "title": "Polymorphic Methods",
+                "explanation": "Different classes can expose the same method name, letting the caller use them through a shared interface.",
+                "examples": [
+                    "plugin.run(text)",
+                    "UppercasePlugin().run('hi')",
+                    "ReversePlugin().run('hi')",
+                ],
+                "watch_out": "Every plugin must implement the same method name. If one class misses run(), the caller will crash.",
+            },
+            {
+                "title": "Registry Pattern",
+                "explanation": "A registry maps names to objects so code can choose behavior dynamically without a long if/elif chain.",
+                "examples": [
+                    "registry = {'upper': UppercasePlugin()}",
+                    "registry[name].run(text)",
+                ],
+                "watch_out": "If user input can contain unknown names, validate before indexing into the registry.",
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/classes.html",
+    },
+
+    {
+        "id": "normalize-user-records",
+        "topic": "best-practices",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Normalize User Records",
+        "description": (
+            "Write a function called `solution` that takes a list of user dictionaries and returns "
+            "a cleaned list. Each output user should have lowercase, trimmed email and title-cased, "
+            "trimmed name. Skip users missing either name or email."
+        ),
+        "starter_code": "def solution(users: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": "solution([{'name':' alice ', 'email':' ALICE@EXAMPLE.COM '}, {'name':'', 'email':'x@y.com'}])",
+                "expected_output": "[{'name': 'Alice', 'email': 'alice@example.com'}]",
+            },
+            {
+                "input": "solution([{'name':'bob stone', 'email':'Bob@Site.io'}])",
+                "expected_output": "[{'name': 'Bob Stone', 'email': 'bob@site.io'}]",
+            },
+            {
+                "input": "solution([{'name':'No Email'}, {'email':'missing@name.com'}])",
+                "expected_output": "[]",
+            },
+        ],
+        "hint": "Use small helper functions or clear local variables so validation and transformation stay easy to read.",
+        "solution": (
+            "def solution(users: list) -> list:\n"
+            "    cleaned = []\n"
+            "    for user in users:\n"
+            "        name = user.get('name', '').strip()\n"
+            "        email = user.get('email', '').strip()\n"
+            "        if not name or not email:\n"
+            "            continue\n"
+            "        cleaned.append({\n"
+            "            'name': name.title(),\n"
+            "            'email': email.lower(),\n"
+            "        })\n"
+            "    return cleaned"
+        ),
+        "concepts": [
+            {
+                "title": "Data Normalisation",
+                "explanation": "Normalisation turns messy input into a consistent shape before the rest of the program uses it.",
+                "examples": [
+                    "name = name.strip().title()",
+                    "email = email.strip().lower()",
+                ],
+                "watch_out": "Normalise after checking for missing values so empty strings do not become misleading data.",
+            },
+            {
+                "title": "Guarding Bad Records",
+                "explanation": "A simple continue can skip invalid input and keep the main transformation path readable.",
+                "examples": [
+                    "if not name or not email:",
+                    "    continue",
+                ],
+                "watch_out": "user['email'] raises KeyError when a key is missing. user.get('email', '') is safer for messy records.",
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
+    },
+
+    {
+        "id": "validate-config",
+        "topic": "best-practices",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Validate Config",
+        "description": (
+            "Write a function called `solution` that validates a config dictionary and returns a list "
+            "of error messages. Required keys are host, port, and debug. host must be a non-empty string, "
+            "port must be an int from 1 to 65535, and debug must be a boolean."
+        ),
+        "starter_code": "def solution(config: dict) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution({'host':'localhost', 'port':8000, 'debug':False})", "expected_output": "[]"},
+            {"input": "solution({'host':'', 'port':70000, 'debug':'no'})", "expected_output": "['host must be a non-empty string', 'port must be between 1 and 65535', 'debug must be a boolean']"},
+            {"input": "solution({'port':3000})", "expected_output": "['host is required', 'debug is required']"},
+        ],
+        "hint": "Validate one rule at a time and append clear error messages in a predictable order.",
+        "solution": (
+            "def solution(config: dict) -> list:\n"
+            "    errors = []\n"
+            "    if 'host' not in config:\n"
+            "        errors.append('host is required')\n"
+            "    elif not isinstance(config['host'], str) or not config['host'].strip():\n"
+            "        errors.append('host must be a non-empty string')\n\n"
+            "    if 'port' not in config:\n"
+            "        errors.append('port is required')\n"
+            "    elif not isinstance(config['port'], int) or not 1 <= config['port'] <= 65535:\n"
+            "        errors.append('port must be between 1 and 65535')\n\n"
+            "    if 'debug' not in config:\n"
+            "        errors.append('debug is required')\n"
+            "    elif not isinstance(config['debug'], bool):\n"
+            "        errors.append('debug must be a boolean')\n\n"
+            "    return errors"
+        ),
+        "concepts": [
+            {
+                "title": "Predictable Validation Order",
+                "explanation": "Returning errors in a consistent order makes tests, logs, and user feedback easier to reason about.",
+                "examples": [
+                    "validate host",
+                    "validate port",
+                    "validate debug",
+                ],
+                "watch_out": "A set would remove duplicates but also make ordering less obvious. A list is better for ordered errors.",
+            },
+            {
+                "title": "isinstance() for Type Checks",
+                "explanation": "isinstance(value, type) checks whether a value has the expected type before using it.",
+                "examples": [
+                    "isinstance(config['port'], int)",
+                    "isinstance(config['debug'], bool)",
+                ],
+                "watch_out": "In Python, bool is a subclass of int. For this exercise that only matters if you accept booleans as ports; stricter validation may need type(value) is int.",
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#isinstance",
+    },
+
+    {
+        "id": "ini-section-parser",
+        "topic": "scripting",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "INI Section Parser",
+        "description": (
+            "Write a function called `solution` that parses a small INI-style config string. "
+            "Section headers look like [database]. Key-value lines look like host=localhost. "
+            "Return a nested dict of sections to key-value pairs. Ignore blank lines and lines starting with #."
+        ),
+        "starter_code": "def solution(config_text: str) -> dict:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": 'solution("[database]\\nhost=localhost\\nport=5432\\n\\n[app]\\ndebug=true")',
+                "expected_output": "{'database': {'host': 'localhost', 'port': '5432'}, 'app': {'debug': 'true'}}",
+            },
+            {
+                "input": 'solution("# comment\\n[server]\\nname=api\\nregion=eu")',
+                "expected_output": "{'server': {'name': 'api', 'region': 'eu'}}",
+            },
+            {"input": 'solution("")', "expected_output": "{}"},
+        ],
+        "hint": "Track the current section as you read each line. When you see a key=value line, store it under that section.",
+        "solution": (
+            "def solution(config_text: str) -> dict:\n"
+            "    result = {}\n"
+            "    current = None\n"
+            "    for raw_line in config_text.splitlines():\n"
+            "        line = raw_line.strip()\n"
+            "        if not line or line.startswith('#'):\n"
+            "            continue\n"
+            "        if line.startswith('[') and line.endswith(']'):\n"
+            "            current = line[1:-1]\n"
+            "            result[current] = {}\n"
+            "        elif current is not None and '=' in line:\n"
+            "            key, value = line.split('=', 1)\n"
+            "            result[current][key.strip()] = value.strip()\n"
+            "    return result"
+        ),
+        "concepts": [
+            {
+                "title": "Stateful Parsing",
+                "explanation": "Some parsers need to remember context, such as which section later key-value lines belong to.",
+                "examples": [
+                    "current = None",
+                    "current = line[1:-1]",
+                    "result[current][key] = value",
+                ],
+                "watch_out": "Do not store key-value lines before a section exists unless the format says global keys are allowed.",
+            },
+            {
+                "title": "Splitting Once",
+                "explanation": "split('=', 1) splits only at the first equals sign, preserving any later equals signs in the value.",
+                "examples": [
+                    "'a=b=c'.split('=', 1)  # ['a', 'b=c']",
+                ],
+                "watch_out": "Using split('=') with no limit can create too many pieces for values that contain equals signs.",
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/configparser.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # JAVASCRIPT — BEGINNER
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "js-count-vowels",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "javascript",
+        "title": "Count Vowels in JavaScript",
+        "description": (
+            "Write a function called `solution` that takes a string and returns the number "
+            "of vowels it contains. Count a, e, i, o, and u, and ignore case.\n\n"
+            "Example:\n  solution('hello') → 2\n  solution('JAVASCRIPT') → 3"
+        ),
+        "starter_code": "function solution(text) {\n  // Your code here\n  return 0;\n}",
+        "test_cases": [
+            {"input": 'solution("hello")', "expected_output": "2"},
+            {"input": 'solution("JAVASCRIPT")', "expected_output": "3"},
+            {"input": 'solution("rhythm")', "expected_output": "0"},
+            {"input": 'solution("AEIOU")', "expected_output": "5"},
+        ],
+        "hint": "Convert the string to lowercase, then loop through each character and check whether it is in 'aeiou'.",
+        "solution": (
+            "function solution(text) {\n"
+            "  const vowels = 'aeiou';\n"
+            "  let count = 0;\n"
+            "  for (const char of text.toLowerCase()) {\n"
+            "    if (vowels.includes(char)) count++;\n"
+            "  }\n"
+            "  return count;\n"
+            "}"
+        ),
+        "concepts": [
+            {
+                "title": "for...of Loops",
+                "explanation": "A for...of loop reads each value from an iterable, such as each character in a string.",
+                "examples": [
+                    "for (const char of 'hello') {",
+                    "  console.log(char);",
+                    "}",
+                ],
+                "watch_out": "for...of gives you the character. for...in gives you the index keys, which is usually not what you want here.",
+            },
+            {
+                "title": "String includes()",
+                "explanation": "includes() checks whether a string contains another string and returns true or false.",
+                "examples": [
+                    "'aeiou'.includes('e') // true",
+                    "'aeiou'.includes('z') // false",
+                ],
+                "watch_out": "includes() is case-sensitive, so convert input to lowercase first if the comparison should ignore case.",
+            },
+        ],
+        "docs_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of",
+    },
+
+    {
+        "id": "js-fizzbuzz",
+        "topic": "algorithms",
+        "difficulty": "beginner",
+        "language": "javascript",
+        "title": "FizzBuzz in JavaScript",
+        "description": (
+            "Write a function called `solution` that takes a number and returns:\n"
+            "  'Fizz' if it is divisible by 3\n"
+            "  'Buzz' if it is divisible by 5\n"
+            "  'FizzBuzz' if it is divisible by both\n"
+            "  the number as a string otherwise"
+        ),
+        "starter_code": "function solution(n) {\n  // Your code here\n  return '';\n}",
+        "test_cases": [
+            {"input": "solution(15)", "expected_output": "FizzBuzz"},
+            {"input": "solution(3)", "expected_output": "Fizz"},
+            {"input": "solution(5)", "expected_output": "Buzz"},
+            {"input": "solution(7)", "expected_output": "7"},
+        ],
+        "hint": "Check divisibility by both 3 and 5 before checking the individual cases.",
+        "solution": (
+            "function solution(n) {\n"
+            "  if (n % 3 === 0 && n % 5 === 0) return 'FizzBuzz';\n"
+            "  if (n % 3 === 0) return 'Fizz';\n"
+            "  if (n % 5 === 0) return 'Buzz';\n"
+            "  return String(n);\n"
+            "}"
+        ),
+        "concepts": [
+            {
+                "title": "Modulo Operator",
+                "explanation": "The % operator returns the remainder after division. A remainder of 0 means a number is divisible.",
+                "examples": [
+                    "15 % 5 // 0",
+                    "7 % 3  // 1",
+                ],
+                "watch_out": "Check the combined FizzBuzz case first. If you return Fizz for 15, you never reach FizzBuzz.",
+            },
+            {
+                "title": "String() Conversion",
+                "explanation": "String(value) converts numbers, booleans, and other values into strings.",
+                "examples": [
+                    "String(7) // '7'",
+                    "String(true) // 'true'",
+                ],
+                "watch_out": "Returning the number 7 is not the same as returning the string '7'.",
+            },
+        ],
+        "docs_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder",
+    },
+
+    {
+        "id": "js-sum-positive-numbers",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "javascript",
+        "title": "Sum Positive Numbers",
+        "description": (
+            "Write a function called `solution` that takes an array of numbers and returns "
+            "the sum of only the positive numbers.\n\n"
+            "Example:\n  solution([1, -2, 3, 4]) → 8"
+        ),
+        "starter_code": "function solution(nums) {\n  // Your code here\n  return 0;\n}",
+        "test_cases": [
+            {"input": "solution([1, -2, 3, 4])", "expected_output": "8"},
+            {"input": "solution([-1, -2, -3])", "expected_output": "0"},
+            {"input": "solution([5, 0, 10])", "expected_output": "15"},
+            {"input": "solution([])", "expected_output": "0"},
+        ],
+        "hint": "Start with total = 0. Loop over the array and add a number only if it is greater than 0.",
+        "solution": (
+            "function solution(nums) {\n"
+            "  let total = 0;\n"
+            "  for (const num of nums) {\n"
+            "    if (num > 0) total += num;\n"
+            "  }\n"
+            "  return total;\n"
+            "}"
+        ),
+        "concepts": [
+            {
+                "title": "Accumulating a Total",
+                "explanation": "A common loop pattern is to start a total at 0, then add matching values as you iterate.",
+                "examples": [
+                    "let total = 0;",
+                    "total += 5; // total is now 5",
+                ],
+                "watch_out": "Use let for a value that changes. const total = 0 cannot be reassigned.",
+            },
+            {
+                "title": "Array Iteration",
+                "explanation": "for...of works well when you need each value in an array and do not need the index.",
+                "examples": [
+                    "for (const num of [1, 2, 3]) {",
+                    "  console.log(num);",
+                    "}",
+                ],
+                "watch_out": "Do not add negative numbers if the requirement is positive numbers only.",
+            },
+        ],
+        "docs_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of",
+    },
+
+    # ──────────────────────────────────────────────
+    # TYPESCRIPT — BEGINNER / INTERMEDIATE
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "ts-is-palindrome",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "typescript",
+        "title": "Palindrome Check in TypeScript",
+        "description": (
+            "Write a function called `solution` that takes a string and returns true if it reads "
+            "the same forwards and backwards. Ignore spaces and case.\n\n"
+            "Example:\n  solution('Race car') → true\n  solution('hello') → false"
+        ),
+        "starter_code": "function solution(text: string): boolean {\n  // Your code here\n  return false;\n}",
+        "test_cases": [
+            {"input": 'solution("Race car")', "expected_output": "true"},
+            {"input": 'solution("A man a plan a canal Panama")', "expected_output": "true"},
+            {"input": 'solution("hello")', "expected_output": "false"},
+            {"input": 'solution("")', "expected_output": "true"},
+        ],
+        "hint": "Clean the string first by lowercasing it and removing spaces. Then compare it to its reverse.",
+        "solution": (
+            "function solution(text: string): boolean {\n"
+            "  const cleaned = text.toLowerCase().replaceAll(' ', '');\n"
+            "  const reversed = cleaned.split('').reverse().join('');\n"
+            "  return cleaned === reversed;\n"
+            "}"
+        ),
+        "concepts": [
+            {
+                "title": "Type Annotations",
+                "explanation": "TypeScript lets you declare parameter and return types so function contracts are clear.",
+                "examples": [
+                    "function solution(text: string): boolean {",
+                    "  return text.length === 0;",
+                    "}",
+                ],
+                "watch_out": "The return type is boolean, so return true or false, not the strings 'true' or 'false'.",
+            },
+            {
+                "title": "Reversing a String",
+                "explanation": "Strings do not have reverse(), but arrays do. Split into characters, reverse, then join.",
+                "examples": [
+                    "'abc'.split('').reverse().join('') // 'cba'",
+                ],
+                "watch_out": "reverse() mutates arrays. In this pattern the array is temporary, so that is fine.",
+            },
+        ],
+        "docs_url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+    },
+
+    {
+        "id": "ts-find-longest-word",
+        "topic": "arrays-strings",
+        "difficulty": "intermediate",
+        "language": "typescript",
+        "title": "Find the Longest Word",
+        "description": (
+            "Write a function called `solution` that takes a sentence and returns the longest word. "
+            "If there is a tie, return the first longest word.\n\n"
+            "Example:\n  solution('the quick brown fox') → 'quick'"
+        ),
+        "starter_code": "function solution(sentence: string): string {\n  // Your code here\n  return '';\n}",
+        "test_cases": [
+            {"input": 'solution("the quick brown fox")', "expected_output": "quick"},
+            {"input": 'solution("a tiny elephant")', "expected_output": "elephant"},
+            {"input": 'solution("same size")', "expected_output": "same"},
+            {"input": 'solution("typescript")', "expected_output": "typescript"},
+        ],
+        "hint": "Split the sentence into words, keep track of the best word so far, and update it when a longer word appears.",
+        "solution": (
+            "function solution(sentence: string): string {\n"
+            "  const words = sentence.split(' ');\n"
+            "  let longest = words[0] ?? '';\n"
+            "  for (const word of words) {\n"
+            "    if (word.length > longest.length) longest = word;\n"
+            "  }\n"
+            "  return longest;\n"
+            "}"
+        ),
+        "concepts": [
+            {
+                "title": "Tracking the Best Value",
+                "explanation": "Seed a variable with the first candidate, then replace it only when you find a better one.",
+                "examples": [
+                    "let longest = words[0];",
+                    "if (word.length > longest.length) longest = word;",
+                ],
+                "watch_out": "Use > instead of >= if ties should keep the first longest word.",
+            },
+            {
+                "title": "Nullish Coalescing",
+                "explanation": "The ?? operator provides a fallback only when the left side is null or undefined.",
+                "examples": [
+                    "const first = words[0] ?? '';",
+                ],
+                "watch_out": "This protects against empty arrays without replacing valid empty strings elsewhere.",
+            },
+        ],
+        "docs_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing",
+    },
+
+    {
+        "id": "ts-grade-calculator",
+        "topic": "best-practices",
+        "difficulty": "beginner",
+        "language": "typescript",
+        "title": "Grade Calculator",
+        "description": (
+            "Write a function called `solution` that takes a numeric score and returns a letter grade:\n"
+            "  'A' for 90 and above\n"
+            "  'B' for 80-89\n"
+            "  'C' for 70-79\n"
+            "  'D' for 60-69\n"
+            "  'F' otherwise"
+        ),
+        "starter_code": "function solution(score: number): string {\n  // Your code here\n  return '';\n}",
+        "test_cases": [
+            {"input": "solution(95)", "expected_output": "A"},
+            {"input": "solution(82)", "expected_output": "B"},
+            {"input": "solution(71)", "expected_output": "C"},
+            {"input": "solution(40)", "expected_output": "F"},
+        ],
+        "hint": "Use guard clauses from highest score to lowest. Once a condition matches, return immediately.",
+        "solution": (
+            "function solution(score: number): string {\n"
+            "  if (score >= 90) return 'A';\n"
+            "  if (score >= 80) return 'B';\n"
+            "  if (score >= 70) return 'C';\n"
+            "  if (score >= 60) return 'D';\n"
+            "  return 'F';\n"
+            "}"
+        ),
+        "concepts": [
+            {
+                "title": "Guard Clauses",
+                "explanation": "A guard clause checks a condition and returns immediately, keeping the rest of the function flat.",
+                "examples": [
+                    "if (score >= 90) return 'A';",
+                    "return 'F';",
+                ],
+                "watch_out": "Order matters. Check 90 before 80, otherwise every A score would return B.",
+            },
+            {
+                "title": "number and string Types",
+                "explanation": "TypeScript can state that score must be a number and the result must be a string.",
+                "examples": [
+                    "function solution(score: number): string {",
+                    "  return 'A';",
+                    "}",
+                ],
+                "watch_out": "Returning a number like 90 would violate the declared string return type.",
+            },
+        ],
+        "docs_url": "https://www.typescriptlang.org/docs/handbook/2/functions.html",
+    },
 ]
