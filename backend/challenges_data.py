@@ -1463,6 +1463,1100 @@ CHALLENGES = [
         "docs_url": "https://docs.python.org/3/library/stdtypes.html#dict.get",
     },
 
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — BEGINNER (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "check-anagram",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Check Anagram",
+        "description": (
+            "Write a function called `solution` that takes two strings and returns True if "
+            "they are anagrams of each other (same letters, different order), False otherwise. "
+            "Ignore case.\n\n"
+            "Example:\n  solution('listen', 'silent') → True\n  solution('hello', 'world') → False"
+        ),
+        "starter_code": "def solution(a: str, b: str) -> bool:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("listen", "silent")', "expected_output": "True"},
+            {"input": 'solution("hello", "world")',   "expected_output": "False"},
+            {"input": 'solution("Abc", "cab")',        "expected_output": "True"},
+            {"input": 'solution("abc", "ab")',         "expected_output": "False"},
+        ],
+        "hint": "Sort both strings and compare — anagrams produce identical sorted results.",
+        "solution": (
+            "def solution(a: str, b: str) -> bool:\n"
+            "    return sorted(a.lower()) == sorted(b.lower())"
+        ),
+        "concepts": [
+            {
+                "title": "sorted() on a String",
+                "explanation": (
+                    "sorted() works on any iterable, including strings. "
+                    "It returns a sorted list of characters. "
+                    "Two strings with the same characters will produce identical sorted lists."
+                ),
+                "examples": [
+                    'sorted("listen")   # [\'e\', \'i\', \'l\', \'n\', \'s\', \'t\']',
+                    'sorted("silent")   # [\'e\', \'i\', \'l\', \'n\', \'s\', \'t\']',
+                    'sorted("listen") == sorted("silent")  # True',
+                ],
+                "watch_out": (
+                    "sorted() returns a list, not a string. "
+                    "Comparing sorted('abc') to sorted('cab') works because list equality compares element-by-element. "
+                    "No need to join back into a string."
+                ),
+            },
+            {
+                "title": "str.lower() for Case-Insensitive Comparison",
+                "explanation": (
+                    "lower() returns a new string with all letters converted to lowercase. "
+                    "Call it on both strings before comparing so 'A' and 'a' are treated the same."
+                ),
+                "examples": [
+                    '"Hello".lower()    # "hello"',
+                    '"ABC".lower()      # "abc"',
+                    '"already".lower()  # "already" — no change',
+                ],
+                "watch_out": (
+                    "lower() does not modify the original string — strings are immutable in Python. "
+                    "It returns a new string, so you must use the return value."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#sorted",
+    },
+
+    {
+        "id": "capitalize-words",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Capitalize Each Word",
+        "description": (
+            "Write a function called `solution` that takes a sentence and returns it "
+            "with the first letter of every word capitalised and the rest lowercase.\n\n"
+            "Example:\n  solution('hello world') → 'Hello World'\n  solution('the QUICK brown FOX') → 'The Quick Brown Fox'"
+        ),
+        "starter_code": "def solution(sentence: str) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("hello world")',        "expected_output": "Hello World"},
+            {"input": 'solution("the QUICK brown FOX")', "expected_output": "The Quick Brown Fox"},
+            {"input": 'solution("python")',             "expected_output": "Python"},
+            {"input": 'solution("a b c")',              "expected_output": "A B C"},
+        ],
+        "hint": "Split into words, apply str.capitalize() to each, then join with spaces.",
+        "solution": (
+            "def solution(sentence: str) -> str:\n"
+            "    return ' '.join(word.capitalize() for word in sentence.split())"
+        ),
+        "concepts": [
+            {
+                "title": "str.capitalize() vs str.upper() vs str.title()",
+                "explanation": (
+                    "capitalize() makes the first character uppercase and the rest lowercase. "
+                    "upper() makes ALL characters uppercase. "
+                    "title() is a one-liner for this exercise but has edge cases (it capitalises after any non-letter)."
+                ),
+                "examples": [
+                    '"hello".capitalize()  # "Hello"',
+                    '"hELLO".capitalize()  # "Hello"  — rest forced lowercase',
+                    '"hello world".title() # "Hello World"',
+                    '"it\'s".title()       # "It\'S"  — the s after \' is also capitalised!',
+                ],
+                "watch_out": (
+                    "str.title() is tempting but has a known bug: it capitalises any letter after a non-letter, "
+                    "so \"it's\" becomes \"It'S\". Using split + capitalize + join is safer."
+                ),
+            },
+            {
+                "title": "str.join() — Assembling a String from Parts",
+                "explanation": (
+                    "separator.join(iterable) concatenates all strings in the iterable, "
+                    "placing separator between each pair."
+                ),
+                "examples": [
+                    '" ".join(["Hello", "World"])  # "Hello World"',
+                    '"-".join(["a", "b", "c"])     # "a-b-c"',
+                    '"".join(["h","i"])             # "hi"',
+                ],
+                "watch_out": (
+                    "join() is the fast way to concatenate many strings. "
+                    "Using result += word in a loop is slow because strings are immutable — "
+                    "each += creates a brand-new string object."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.capitalize",
+    },
+
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — INTERMEDIATE (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "rotate-list",
+        "topic": "arrays-strings",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Rotate a List",
+        "description": (
+            "Write a function called `solution` that takes a list and an integer k, "
+            "and returns the list rotated to the right by k positions.\n\n"
+            "Example:\n  solution([1, 2, 3, 4, 5], 2) → [4, 5, 1, 2, 3]\n"
+            "  solution([1, 2, 3], 1) → [3, 1, 2]"
+        ),
+        "starter_code": "def solution(nums: list, k: int) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([1, 2, 3, 4, 5], 2)", "expected_output": "[4, 5, 1, 2, 3]"},
+            {"input": "solution([1, 2, 3], 1)",        "expected_output": "[3, 1, 2]"},
+            {"input": "solution([1, 2, 3], 0)",        "expected_output": "[1, 2, 3]"},
+            {"input": "solution([1, 2, 3], 3)",        "expected_output": "[1, 2, 3]"},
+        ],
+        "hint": "Use the modulo operator to handle k larger than the list length. Then slice: the last k elements come first.",
+        "solution": (
+            "def solution(nums: list, k: int) -> list:\n"
+            "    if not nums:\n"
+            "        return nums\n"
+            "    k = k % len(nums)\n"
+            "    return nums[-k:] + nums[:-k] if k else nums[:]"
+        ),
+        "concepts": [
+            {
+                "title": "Modulo for Wrap-Around  %",
+                "explanation": (
+                    "k % n keeps k within the range 0..n-1. "
+                    "Rotating by the list's length is the same as not rotating at all — "
+                    "modulo handles any k automatically."
+                ),
+                "examples": [
+                    "# List of length 3:",
+                    "k=4 → 4 % 3 = 1   # same as rotating by 1",
+                    "k=3 → 3 % 3 = 0   # no rotation needed",
+                    "k=0 → 0 % 3 = 0   # no rotation",
+                ],
+                "watch_out": (
+                    "Always apply modulo before slicing. "
+                    "nums[-0:] is the same as nums[0:] (the whole list), not an empty slice — "
+                    "the k=0 edge case needs a separate check or the ternary `if k else nums[:]`."
+                ),
+            },
+            {
+                "title": "Combining Slices with +",
+                "explanation": (
+                    "You can concatenate two list slices with +. "
+                    "For a right rotation by k: take the last k elements, then the rest."
+                ),
+                "examples": [
+                    "nums = [1, 2, 3, 4, 5]",
+                    "k = 2",
+                    "nums[-2:]      # [4, 5]  — last 2",
+                    "nums[:-2]      # [1, 2, 3]  — everything before",
+                    "nums[-2:] + nums[:-2]  # [4, 5, 1, 2, 3]",
+                ],
+                "watch_out": (
+                    "nums[-0:] is nums[0:] — the whole list — so k=0 must be handled before slicing. "
+                    "The ternary `... if k else nums[:]` is the cleanest fix."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/introduction.html#lists",
+    },
+
+    {
+        "id": "string-compression",
+        "topic": "arrays-strings",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "String Compression",
+        "description": (
+            "Write a function called `solution` that compresses a string using run-length encoding. "
+            "Replace consecutive repeated characters with the character followed by its count.\n\n"
+            "Example:\n  solution('aabccc') → 'a2b1c3'\n  solution('aaaa') → 'a4'"
+        ),
+        "starter_code": "def solution(s: str) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("aabccc")', "expected_output": "a2b1c3"},
+            {"input": 'solution("aaaa")',   "expected_output": "a4"},
+            {"input": 'solution("abc")',    "expected_output": "a1b1c1"},
+            {"input": 'solution("a")',      "expected_output": "a1"},
+        ],
+        "hint": "Walk through the string keeping track of the current character and how many times you have seen it in a row.",
+        "solution": (
+            "def solution(s: str) -> str:\n"
+            "    if not s:\n"
+            "        return ''\n"
+            "    result = []\n"
+            "    count = 1\n"
+            "    for i in range(1, len(s)):\n"
+            "        if s[i] == s[i - 1]:\n"
+            "            count += 1\n"
+            "        else:\n"
+            "            result.append(s[i - 1] + str(count))\n"
+            "            count = 1\n"
+            "    result.append(s[-1] + str(count))\n"
+            "    return ''.join(result)"
+        ),
+        "concepts": [
+            {
+                "title": "Iterating with an Index  range(1, len(s))",
+                "explanation": (
+                    "When you need to compare adjacent characters, iterate by index so you can "
+                    "look at both s[i] and s[i-1] at the same time."
+                ),
+                "examples": [
+                    's = "aab"',
+                    "for i in range(1, len(s)):",
+                    "    print(s[i-1], s[i])  # ('a','a'), ('a','b')",
+                ],
+                "watch_out": (
+                    "Start the range at 1 (not 0) so s[i-1] is always valid. "
+                    "After the loop, don't forget to flush the last character and count."
+                ),
+            },
+            {
+                "title": "Building Strings Efficiently with a List",
+                "explanation": (
+                    "Appending to a list and joining at the end is faster than "
+                    "result += char in a loop, because strings are immutable — "
+                    "each += allocates a new string."
+                ),
+                "examples": [
+                    "parts = []",
+                    "parts.append('a' + str(3))  # 'a3'",
+                    "parts.append('b' + str(1))  # 'b1'",
+                    "''.join(parts)               # 'a3b1'",
+                ],
+                "watch_out": (
+                    "str(count) converts the integer to a string. "
+                    "'a' + 3 raises a TypeError — you cannot concatenate str and int directly."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.join",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — BEGINNER (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "sum-of-digits",
+        "topic": "algorithms",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Sum of Digits",
+        "description": (
+            "Write a function called `solution` that takes a non-negative integer and "
+            "returns the sum of its digits.\n\n"
+            "Example:\n  solution(123) → 6\n  solution(9999) → 36"
+        ),
+        "starter_code": "def solution(n: int) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(123)",  "expected_output": "6"},
+            {"input": "solution(0)",    "expected_output": "0"},
+            {"input": "solution(9999)", "expected_output": "36"},
+            {"input": "solution(100)",  "expected_output": "1"},
+        ],
+        "hint": "Convert the number to a string, iterate over each character, convert back to int, and sum them up.",
+        "solution": (
+            "def solution(n: int) -> int:\n"
+            "    return sum(int(d) for d in str(n))"
+        ),
+        "concepts": [
+            {
+                "title": "str() and int() — Converting Between Types",
+                "explanation": (
+                    "str(n) converts an integer to a string so you can iterate over its digits. "
+                    "int(d) converts each character digit back to an integer for arithmetic."
+                ),
+                "examples": [
+                    'str(123)       # "123"',
+                    'for d in str(123): print(d)   # "1", "2", "3"',
+                    'int("7")       # 7',
+                    'sum(int(d) for d in str(123))  # 6',
+                ],
+                "watch_out": (
+                    'int("7") works because "7" is a valid integer string. '
+                    'int("a") raises a ValueError. '
+                    "Always make sure the string contains only digit characters before converting."
+                ),
+            },
+            {
+                "title": "Generator Expressions inside sum()",
+                "explanation": (
+                    "sum() accepts any iterable, including a generator expression. "
+                    "You can compute and sum in one line without building an intermediate list."
+                ),
+                "examples": [
+                    "sum(int(d) for d in '123')   # 6",
+                    "sum(x**2 for x in range(4))  # 0+1+4+9 = 14",
+                ],
+                "watch_out": (
+                    "A generator expression (round brackets) is lazy — values are produced one at a time. "
+                    "A list comprehension (square brackets) builds the whole list first. "
+                    "For sum(), the generator is more memory-efficient."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#sum",
+    },
+
+    {
+        "id": "count-occurrences",
+        "topic": "algorithms",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Count Occurrences",
+        "description": (
+            "Write a function called `solution` that takes a list and a target value, "
+            "and returns how many times the target appears in the list. "
+            "Do not use list.count().\n\n"
+            "Example:\n  solution([1, 2, 2, 3, 2], 2) → 3"
+        ),
+        "starter_code": "def solution(items: list, target) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([1, 2, 2, 3, 2], 2)", "expected_output": "3"},
+            {"input": "solution([1, 2, 3], 4)",        "expected_output": "0"},
+            {"input": "solution([], 1)",               "expected_output": "0"},
+            {"input": "solution([5, 5, 5], 5)",        "expected_output": "3"},
+        ],
+        "hint": "Use a for loop and a counter variable. Increment the counter each time you find the target.",
+        "solution": (
+            "def solution(items: list, target) -> int:\n"
+            "    count = 0\n"
+            "    for item in items:\n"
+            "        if item == target:\n"
+            "            count += 1\n"
+            "    return count"
+        ),
+        "concepts": [
+            {
+                "title": "Accumulator Pattern",
+                "explanation": (
+                    "Start a variable at 0 (or an empty collection), then update it each loop iteration. "
+                    "This is one of the most fundamental patterns in programming."
+                ),
+                "examples": [
+                    "count = 0",
+                    "for item in items:",
+                    "    if item == target:",
+                    "        count += 1   # accumulate",
+                    "return count",
+                ],
+                "watch_out": (
+                    "Make sure to initialise the accumulator BEFORE the loop, not inside it. "
+                    "Initialising inside would reset it to 0 every iteration."
+                ),
+            },
+            {
+                "title": "== vs is",
+                "explanation": (
+                    "== checks value equality (do they contain the same data?). "
+                    "is checks identity (are they the exact same object in memory?). "
+                    "Always use == for comparisons unless you specifically need identity."
+                ),
+                "examples": [
+                    "a = [1, 2]",
+                    "b = [1, 2]",
+                    "a == b   # True  — same values",
+                    "a is b   # False — different objects",
+                    "",
+                    "# Use is only for None checks:",
+                    "if x is None: ...",
+                ],
+                "watch_out": (
+                    "Using is to compare integers or strings can sometimes work by accident "
+                    "(Python caches small integers). Never rely on this — always use ==."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — INTERMEDIATE (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "selection-sort",
+        "topic": "algorithms",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Selection Sort",
+        "description": (
+            "Write a function called `solution` that sorts a list of integers in ascending order "
+            "using selection sort. Return the sorted list. Do not use sort() or sorted().\n\n"
+            "Selection sort: find the minimum of the unsorted portion, swap it into place, repeat.\n\n"
+            "Example:\n  solution([64, 25, 12, 22, 11]) → [11, 12, 22, 25, 64]"
+        ),
+        "starter_code": "def solution(nums: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([64, 25, 12, 22, 11])", "expected_output": "[11, 12, 22, 25, 64]"},
+            {"input": "solution([3, 1, 2])",             "expected_output": "[1, 2, 3]"},
+            {"input": "solution([1])",                   "expected_output": "[1]"},
+            {"input": "solution([5, 5, 1])",             "expected_output": "[1, 5, 5]"},
+        ],
+        "hint": "Use an outer loop from 0 to n. Inside, find the index of the minimum in the remaining slice, then swap it with position i.",
+        "solution": (
+            "def solution(nums: list) -> list:\n"
+            "    nums = nums[:]\n"
+            "    n = len(nums)\n"
+            "    for i in range(n):\n"
+            "        min_idx = i\n"
+            "        for j in range(i + 1, n):\n"
+            "            if nums[j] < nums[min_idx]:\n"
+            "                min_idx = j\n"
+            "        nums[i], nums[min_idx] = nums[min_idx], nums[i]\n"
+            "    return nums"
+        ),
+        "concepts": [
+            {
+                "title": "Tracking the Index of a Minimum",
+                "explanation": (
+                    "Instead of storing the minimum value, store its index. "
+                    "That way you know exactly where to swap it to."
+                ),
+                "examples": [
+                    "nums = [3, 1, 4, 1]",
+                    "min_idx = 0",
+                    "for j in range(1, len(nums)):",
+                    "    if nums[j] < nums[min_idx]:",
+                    "        min_idx = j",
+                    "# min_idx is now 1 (value 1)",
+                ],
+                "watch_out": (
+                    "Initialise min_idx = i (the start of the unsorted portion), not 0. "
+                    "Starting at 0 every time would incorrectly search already-sorted elements."
+                ),
+            },
+            {
+                "title": "Nested Loops for O(n²) Algorithms",
+                "explanation": (
+                    "Selection sort has two loops: an outer one that moves the boundary, "
+                    "and an inner one that scans the unsorted portion. "
+                    "This gives O(n²) time — fine for small lists, slow for large ones."
+                ),
+                "examples": [
+                    "for i in range(n):          # outer: sorted boundary",
+                    "    for j in range(i+1, n): # inner: scan unsorted",
+                    "        ...",
+                ],
+                "watch_out": (
+                    "Selection sort always does O(n²) comparisons regardless of input order. "
+                    "Bubble sort can exit early if the list is already sorted, but selection sort cannot."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/howto/sorting.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — ADVANCED (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "climbing-stairs",
+        "topic": "algorithms",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Climbing Stairs (DP)",
+        "description": (
+            "You are climbing a staircase with n steps. Each time you can either climb 1 or 2 steps. "
+            "Write a function called `solution` that returns the number of distinct ways to reach the top.\n\n"
+            "Example:\n  solution(2) → 2  (1+1 or 2)\n  solution(3) → 3  (1+1+1, 1+2, 2+1)\n  solution(5) → 8"
+        ),
+        "starter_code": "def solution(n: int) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(1)", "expected_output": "1"},
+            {"input": "solution(2)", "expected_output": "2"},
+            {"input": "solution(3)", "expected_output": "3"},
+            {"input": "solution(5)", "expected_output": "8"},
+        ],
+        "hint": "Notice the pattern: ways(n) = ways(n-1) + ways(n-2). This is Fibonacci! Use two variables to avoid recursion.",
+        "solution": (
+            "def solution(n: int) -> int:\n"
+            "    if n <= 1:\n"
+            "        return 1\n"
+            "    a, b = 1, 1\n"
+            "    for _ in range(2, n + 1):\n"
+            "        a, b = b, a + b\n"
+            "    return b"
+        ),
+        "concepts": [
+            {
+                "title": "Dynamic Programming — Bottom-Up",
+                "explanation": (
+                    "Dynamic programming solves a problem by building up from smaller sub-problems. "
+                    "Here, the number of ways to reach step n depends only on steps n-1 and n-2 — "
+                    "so you only need to keep two values."
+                ),
+                "examples": [
+                    "# ways(1)=1, ways(2)=2, ways(3)=3, ways(4)=5 ...",
+                    "a, b = 1, 1   # ways(0), ways(1)",
+                    "# each iteration: new b = a+b, new a = old b",
+                    "a, b = b, a + b",
+                ],
+                "watch_out": (
+                    "The naive recursive approach recomputes the same values many times (exponential time). "
+                    "The iterative approach is O(n) time and O(1) space — always prefer it."
+                ),
+            },
+            {
+                "title": "Simultaneous Assignment  a, b = b, a + b",
+                "explanation": (
+                    "Python evaluates the right side completely before assigning. "
+                    "So a, b = b, a + b correctly uses the OLD values of a and b on the right. "
+                    "No temporary variable needed."
+                ),
+                "examples": [
+                    "a, b = 1, 1",
+                    "a, b = b, a + b   # a=1, b=2",
+                    "a, b = b, a + b   # a=2, b=3",
+                    "a, b = b, a + b   # a=3, b=5",
+                ],
+                "watch_out": (
+                    "If you write a = b; b = a + b, the second line uses the NEW value of a (which is b), "
+                    "not the old one. The single-line swap avoids this bug entirely."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/controlflow.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # DATA STRUCTURES — BEGINNER (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "queue-using-list",
+        "topic": "data-structures",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Queue: Enqueue and Dequeue",
+        "description": (
+            "A queue is First-In First-Out (FIFO). Write a function called `solution` that takes "
+            "a list of string operations and returns the front element after all operations.\n"
+            "Operations:\n  'enqueue:X' — add integer X to the back\n  'dequeue' — remove the front element\n\n"
+            "Example:\n  solution(['enqueue:1','enqueue:2','dequeue','enqueue:3']) → 2"
+        ),
+        "starter_code": "def solution(ops: list) -> int:\n    queue = []\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(['enqueue:1','enqueue:2','dequeue','enqueue:3'])", "expected_output": "2"},
+            {"input": "solution(['enqueue:5'])",                                   "expected_output": "5"},
+            {"input": "solution(['enqueue:1','enqueue:2','enqueue:3'])",           "expected_output": "1"},
+        ],
+        "hint": "Use a Python list. append() adds to the back. pop(0) removes from the front. queue[0] peeks at the front without removing.",
+        "solution": (
+            "def solution(ops: list) -> int:\n"
+            "    queue = []\n"
+            "    for op in ops:\n"
+            "        if op.startswith('enqueue:'):\n"
+            "            queue.append(int(op.split(':')[1]))\n"
+            "        elif op == 'dequeue':\n"
+            "            queue.pop(0)\n"
+            "    return queue[0]"
+        ),
+        "concepts": [
+            {
+                "title": "Queue vs Stack",
+                "explanation": (
+                    "A stack is LIFO (last in, first out) — like a stack of plates. "
+                    "A queue is FIFO (first in, first out) — like a line at a shop. "
+                    "Both can be simulated with a Python list."
+                ),
+                "examples": [
+                    "# Stack: append to end, pop from end",
+                    "stack.append(x)   # push",
+                    "stack.pop()       # pop last",
+                    "",
+                    "# Queue: append to end, pop from front",
+                    "queue.append(x)   # enqueue",
+                    "queue.pop(0)      # dequeue first",
+                ],
+                "watch_out": (
+                    "list.pop(0) is O(n) because all remaining elements shift left. "
+                    "For performance-critical code, use collections.deque which has O(1) popleft(). "
+                    "For learning purposes, list.pop(0) is fine."
+                ),
+            },
+            {
+                "title": "collections.deque — The Proper Queue",
+                "explanation": (
+                    "Python's standard library has deque (double-ended queue) in the collections module. "
+                    "It has O(1) append and popleft, making it ideal for queues."
+                ),
+                "examples": [
+                    "from collections import deque",
+                    "q = deque()",
+                    "q.append(1)    # enqueue",
+                    "q.append(2)",
+                    "q.popleft()    # dequeue → 1",
+                    "q[0]           # peek front → 2",
+                ],
+                "watch_out": (
+                    "deque supports indexing (q[0]) but is not a list — "
+                    "some list-specific methods like sort() are not available. "
+                    "For most queue tasks, append() and popleft() are all you need."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/collections.html#collections.deque",
+    },
+
+    # ──────────────────────────────────────────────
+    # DATA STRUCTURES — INTERMEDIATE (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "min-stack",
+        "topic": "data-structures",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Min Stack",
+        "description": (
+            "Design a stack that supports push, pop, and get_min() in O(1) time. "
+            "get_min() returns the smallest element currently in the stack.\n\n"
+            "Write `solution(ops)` where ops is a list of strings:\n"
+            "  'push:X' — push integer X\n"
+            "  'pop' — remove the top element\n"
+            "  'min' — record the current minimum\n\n"
+            "Return a list of integers from each 'min' operation in order.\n\n"
+            "Example:\n  solution(['push:5','push:3','min','push:1','min']) → [3, 1]"
+        ),
+        "starter_code": "def solution(ops: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(['push:5','push:3','min','push:1','min'])", "expected_output": "[3, 1]"},
+            {"input": "solution(['push:2','push:4','min','pop','min'])",    "expected_output": "[2, 2]"},
+            {"input": "solution(['push:1','min'])",                         "expected_output": "[1]"},
+        ],
+        "hint": "Keep a second 'min stack' alongside the main stack. Every push also pushes the new minimum onto the min stack.",
+        "solution": (
+            "def solution(ops: list) -> list:\n"
+            "    stack = []\n"
+            "    min_stack = []   # top is always the current minimum\n"
+            "    results = []\n"
+            "    for op in ops:\n"
+            "        if op.startswith('push:'):\n"
+            "            val = int(op.split(':')[1])\n"
+            "            stack.append(val)\n"
+            "            if not min_stack or val <= min_stack[-1]:\n"
+            "                min_stack.append(val)\n"
+            "            else:\n"
+            "                min_stack.append(min_stack[-1])\n"
+            "        elif op == 'pop':\n"
+            "            stack.pop()\n"
+            "            min_stack.pop()\n"
+            "        elif op == 'min':\n"
+            "            results.append(min_stack[-1])\n"
+            "    return results"
+        ),
+        "concepts": [
+            {
+                "title": "Auxiliary Stack for O(1) Minimum",
+                "explanation": (
+                    "The trick is a second stack that mirrors the main stack but stores the running minimum. "
+                    "Every push records 'what is the minimum so far?', so get_min() is just a peek at the top."
+                ),
+                "examples": [
+                    "# Push 5, 3, 7:",
+                    "main:    [5, 3, 7]",
+                    "min_stk: [5, 3, 3]  # 7 > 3, so min is still 3",
+                    "",
+                    "# Pop 7:",
+                    "main:    [5, 3]",
+                    "min_stk: [5, 3]     # min is still 3",
+                    "",
+                    "# get_min → min_stk[-1] = 3",
+                ],
+                "watch_out": (
+                    "You must pop the min_stack in sync with the main stack. "
+                    "If they get out of sync, get_min() will return stale values."
+                ),
+            },
+            {
+                "title": "Running Minimum Pattern",
+                "explanation": (
+                    "When processing a sequence, maintain the best (min/max/sum) seen so far. "
+                    "Each new element either beats the current best or the best stays the same."
+                ),
+                "examples": [
+                    "current_min = float('inf')",
+                    "for x in values:",
+                    "    current_min = min(current_min, x)",
+                    "",
+                    "# Or inline when pushing:",
+                    "new_min = min(val, min_stack[-1]) if min_stack else val",
+                    "min_stack.append(new_min)",
+                ],
+                "watch_out": (
+                    "float('inf') is a handy sentinel for 'no minimum yet'. "
+                    "Any real number is smaller, so the first comparison always wins."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks",
+    },
+
+    # ──────────────────────────────────────────────
+    # OOP — BEGINNER (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "temperature-converter",
+        "topic": "oop",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Temperature Converter Class",
+        "description": (
+            "Write a class called `TemperatureConverter` that:\n"
+            "  - Takes a temperature in Celsius in __init__\n"
+            "  - Has to_fahrenheit() → returns Celsius * 9/5 + 32, rounded to 2 decimal places\n"
+            "  - Has to_kelvin() → returns Celsius + 273.15, rounded to 2 decimal places\n\n"
+            "Write `solution(celsius, scale)` that creates a converter and returns the result "
+            "for 'fahrenheit' or 'kelvin'.\n\n"
+            "Example:\n  solution(0, 'fahrenheit') → 32.0\n  solution(0, 'kelvin') → 273.15"
+        ),
+        "starter_code": (
+            "class TemperatureConverter:\n"
+            "    def __init__(self, celsius: float):\n"
+            "        pass\n\n"
+            "    def to_fahrenheit(self) -> float:\n"
+            "        pass\n\n"
+            "    def to_kelvin(self) -> float:\n"
+            "        pass\n\n\n"
+            "def solution(celsius: float, scale: str) -> float:\n"
+            "    pass"
+        ),
+        "test_cases": [
+            {"input": "solution(0, 'fahrenheit')",    "expected_output": "32.0"},
+            {"input": "solution(100, 'fahrenheit')",  "expected_output": "212.0"},
+            {"input": "solution(0, 'kelvin')",        "expected_output": "273.15"},
+            {"input": "solution(25, 'fahrenheit')",   "expected_output": "77.0"},
+        ],
+        "hint": "Store celsius as self.celsius in __init__. Use round(value, 2) in each conversion method.",
+        "solution": (
+            "class TemperatureConverter:\n"
+            "    def __init__(self, celsius: float):\n"
+            "        self.celsius = celsius\n\n"
+            "    def to_fahrenheit(self) -> float:\n"
+            "        return round(self.celsius * 9 / 5 + 32, 2)\n\n"
+            "    def to_kelvin(self) -> float:\n"
+            "        return round(self.celsius + 273.15, 2)\n\n\n"
+            "def solution(celsius: float, scale: str) -> float:\n"
+            "    t = TemperatureConverter(celsius)\n"
+            "    if scale == 'fahrenheit':\n"
+            "        return t.to_fahrenheit()\n"
+            "    return t.to_kelvin()"
+        ),
+        "concepts": [
+            {
+                "title": "Methods as Behaviours",
+                "explanation": (
+                    "A method is a function that belongs to an object. "
+                    "It can read and use the object's data (self.celsius) without needing parameters."
+                ),
+                "examples": [
+                    "class TemperatureConverter:",
+                    "    def __init__(self, celsius):",
+                    "        self.celsius = celsius",
+                    "",
+                    "    def to_fahrenheit(self):",
+                    "        return self.celsius * 9/5 + 32",
+                    "",
+                    "t = TemperatureConverter(100)",
+                    "t.to_fahrenheit()  # 212.0",
+                ],
+                "watch_out": (
+                    "The conversion formula is (C * 9/5) + 32, not (C * 9) / (5 + 32). "
+                    "Python follows standard operator precedence: * and / before +. "
+                    "No brackets needed, but add them if it makes the formula clearer."
+                ),
+            },
+            {
+                "title": "round(value, ndigits)",
+                "explanation": (
+                    "round(x, 2) rounds x to 2 decimal places. "
+                    "Used here to give clean output instead of floating-point noise like 212.00000000001."
+                ),
+                "examples": [
+                    "round(3.14159, 2)  # 3.14",
+                    "round(212.0, 2)    # 212.0",
+                    "round(2.675, 2)    # 2.67 — floating-point can surprise you",
+                ],
+                "watch_out": (
+                    "Floating-point arithmetic is not exact. 0.1 + 0.2 is 0.30000000000000004. "
+                    "round() hides most of this noise, but for financial calculations use the decimal module."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/classes.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # OOP — INTERMEDIATE (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "todo-list",
+        "topic": "oop",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Todo List Class",
+        "description": (
+            "Build a `TodoList` class with:\n"
+            "  - add(task: str) — add a task (default: not done)\n"
+            "  - complete(task: str) — mark a task as done\n"
+            "  - get_pending() — return a list of tasks that are NOT done (in insertion order)\n\n"
+            "Write `solution(ops)` where ops is a list of ('add', task) or ('complete', task) tuples. "
+            "Return the result of get_pending() after all operations.\n\n"
+            "Example:\n"
+            "  solution([('add','write tests'),('add','fix bug'),('complete','fix bug')])\n"
+            "  → ['write tests']"
+        ),
+        "starter_code": (
+            "class TodoList:\n"
+            "    def __init__(self):\n"
+            "        pass\n\n"
+            "    def add(self, task: str):\n"
+            "        pass\n\n"
+            "    def complete(self, task: str):\n"
+            "        pass\n\n"
+            "    def get_pending(self) -> list:\n"
+            "        pass\n\n\n"
+            "def solution(ops: list) -> list:\n"
+            "    pass"
+        ),
+        "test_cases": [
+            {
+                "input": "solution([('add','write tests'),('add','fix bug'),('complete','fix bug')])",
+                "expected_output": "['write tests']",
+            },
+            {
+                "input": "solution([('add','task1')])",
+                "expected_output": "['task1']",
+            },
+            {
+                "input": "solution([])",
+                "expected_output": "[]",
+            },
+        ],
+        "hint": "Use a dict mapping task → bool (False=pending, True=done). get_pending() filters for False values.",
+        "solution": (
+            "class TodoList:\n"
+            "    def __init__(self):\n"
+            "        self.tasks = {}   # task → done (bool)\n\n"
+            "    def add(self, task: str):\n"
+            "        self.tasks[task] = False\n\n"
+            "    def complete(self, task: str):\n"
+            "        if task in self.tasks:\n"
+            "            self.tasks[task] = True\n\n"
+            "    def get_pending(self) -> list:\n"
+            "        return [t for t, done in self.tasks.items() if not done]\n\n\n"
+            "def solution(ops: list) -> list:\n"
+            "    todo = TodoList()\n"
+            "    for op, *args in ops:\n"
+            "        if op == 'add':\n"
+            "            todo.add(args[0])\n"
+            "        elif op == 'complete':\n"
+            "            todo.complete(args[0])\n"
+            "    return todo.get_pending()"
+        ),
+        "concepts": [
+            {
+                "title": "Dict as a State Store",
+                "explanation": (
+                    "A dict maps each task to its completion state. "
+                    "Lookups and updates are O(1), and insertion order is preserved in Python 3.7+."
+                ),
+                "examples": [
+                    "tasks = {}",
+                    "tasks['write tests'] = False   # add",
+                    "tasks['fix bug']     = False",
+                    "tasks['fix bug']     = True    # complete",
+                    "{t: v for t, v in tasks.items() if not v}",
+                    "# → {'write tests': False}",
+                ],
+                "watch_out": (
+                    "Calling complete() on a task that was never added should do nothing. "
+                    "Always guard with 'if task in self.tasks:' before updating."
+                ),
+            },
+            {
+                "title": "Iterating a Dict with .items()",
+                "explanation": (
+                    "dict.items() returns (key, value) pairs. "
+                    "Combine with a list comprehension to filter by value."
+                ),
+                "examples": [
+                    "tasks = {'a': False, 'b': True, 'c': False}",
+                    "[t for t, done in tasks.items() if not done]",
+                    "# ['a', 'c']  — only pending tasks",
+                ],
+                "watch_out": (
+                    "Modifying a dict while iterating over it raises a RuntimeError. "
+                    "If you need to remove items during iteration, iterate over list(tasks.items()) instead."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+    },
+
+    # ──────────────────────────────────────────────
+    # BEST PRACTICES — BEGINNER (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "dict-comprehension",
+        "topic": "best-practices",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Dictionary Comprehension",
+        "description": (
+            "Write a function called `solution` that takes a list of words and returns "
+            "a dictionary mapping each word to its length. Use a dict comprehension.\n\n"
+            "Example:\n  solution(['cat', 'elephant', 'hi']) → {'cat': 3, 'elephant': 8, 'hi': 2}"
+        ),
+        "starter_code": "def solution(words: list) -> dict:\n    # Use a dict comprehension\n    pass",
+        "test_cases": [
+            {"input": "solution(['cat', 'elephant', 'hi'])", "expected_output": "{'cat': 3, 'elephant': 8, 'hi': 2}"},
+            {"input": "solution(['hello'])",                  "expected_output": "{'hello': 5}"},
+            {"input": "solution([])",                         "expected_output": "{}"},
+        ],
+        "hint": "Dict comprehension syntax: {key_expr: value_expr for item in iterable}",
+        "solution": (
+            "def solution(words: list) -> dict:\n"
+            "    return {word: len(word) for word in words}"
+        ),
+        "concepts": [
+            {
+                "title": "Dictionary Comprehensions",
+                "explanation": (
+                    "A dict comprehension builds a dict in one expression: "
+                    "{key: value for item in iterable}. "
+                    "It is the dict equivalent of a list comprehension."
+                ),
+                "examples": [
+                    "# Word → length:",
+                    "{w: len(w) for w in ['cat', 'dog']}   # {'cat':3, 'dog':3}",
+                    "",
+                    "# Number → square:",
+                    "{n: n**2 for n in range(4)}  # {0:0, 1:1, 2:4, 3:9}",
+                    "",
+                    "# With filter:",
+                    "{w: len(w) for w in words if len(w) > 3}",
+                ],
+                "watch_out": (
+                    "If the iterable has duplicate keys, later values overwrite earlier ones. "
+                    "{w[0]: w for w in ['ant','ape']} → {'a': 'ape'} — 'ant' is lost."
+                ),
+            },
+            {
+                "title": "len() on Strings",
+                "explanation": (
+                    "len(s) returns the number of characters in string s. "
+                    "It counts every character including spaces and punctuation."
+                ),
+                "examples": [
+                    'len("hello")    # 5',
+                    'len("")         # 0',
+                    'len("hi there") # 8  — space counts',
+                ],
+                "watch_out": (
+                    "len() on a list counts elements, on a string it counts characters, "
+                    "on a dict it counts key-value pairs. The function is universal — "
+                    "it works on any sized container."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+    },
+
+    # ──────────────────────────────────────────────
+    # SCRIPTING — BEGINNER (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "caesar-cipher",
+        "topic": "scripting",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Caesar Cipher",
+        "description": (
+            "Write a function called `solution` that encrypts a string using a Caesar cipher. "
+            "Shift each letter forward by n positions in the alphabet, wrapping around. "
+            "Preserve case. Leave non-letter characters unchanged.\n\n"
+            "Example:\n  solution('abc', 3) → 'def'\n  solution('xyz', 1) → 'yza'\n  solution('Hello!', 1) → 'Ifmmp!'"
+        ),
+        "starter_code": "def solution(text: str, n: int) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("abc", 3)',    "expected_output": "def"},
+            {"input": 'solution("xyz", 1)',    "expected_output": "yza"},
+            {"input": 'solution("Hello!", 1)', "expected_output": "Ifmmp!"},
+            {"input": 'solution("abc", 0)',    "expected_output": "abc"},
+        ],
+        "hint": "Use ord() to get a character's ASCII value and chr() to convert back. Wrap with modulo 26.",
+        "solution": (
+            "def solution(text: str, n: int) -> str:\n"
+            "    result = []\n"
+            "    for ch in text:\n"
+            "        if ch.isalpha():\n"
+            "            base = ord('A') if ch.isupper() else ord('a')\n"
+            "            shifted = (ord(ch) - base + n) % 26 + base\n"
+            "            result.append(chr(shifted))\n"
+            "        else:\n"
+            "            result.append(ch)\n"
+            "    return ''.join(result)"
+        ),
+        "concepts": [
+            {
+                "title": "ord() and chr() — Characters and ASCII",
+                "explanation": (
+                    "ord(ch) returns the ASCII integer for a character. "
+                    "chr(n) converts an integer back to a character. "
+                    "Together they let you do arithmetic on letters."
+                ),
+                "examples": [
+                    'ord("a")   # 97',
+                    'ord("z")   # 122',
+                    'ord("A")   # 65',
+                    'chr(98)    # "b"',
+                    'chr(ord("a") + 1)  # "b"',
+                ],
+                "watch_out": (
+                    "Uppercase 'A'=65 and lowercase 'a'=97 have different base values. "
+                    "Always subtract the right base (ord('A') or ord('a')) before arithmetic."
+                ),
+            },
+            {
+                "title": "Modulo for Wrap-Around  % 26",
+                "explanation": (
+                    "The alphabet has 26 letters. After 'z' (or 'Z') you wrap back to 'a' (or 'A'). "
+                    "Modulo keeps the shifted value in range 0..25."
+                ),
+                "examples": [
+                    "# Shift 'x' (index 23) by 4:",
+                    "(23 + 4) % 26  # 1  → 'b'",
+                    "",
+                    "# Shift 'z' (index 25) by 1:",
+                    "(25 + 1) % 26  # 0  → 'a'",
+                ],
+                "watch_out": (
+                    "Do the modulo on the offset (0..25 range), then add the base back. "
+                    "The formula is: (ord(ch) - base + n) % 26 + base."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#ord",
+    },
+
+    # ──────────────────────────────────────────────
+    # SCRIPTING — INTERMEDIATE (batch 2)
+    # ──────────────────────────────────────────────
+
     {
         "id": "csv-row-parser",
         "topic": "scripting",
@@ -1535,6 +2629,89 @@ CHALLENGES = [
             },
         ],
         "docs_url": "https://docs.python.org/3/library/functions.html#zip",
+    },
+
+    {
+        "id": "log-parser",
+        "topic": "scripting",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Log File Parser",
+        "description": (
+            "Write a function called `solution` that takes a multi-line log string and returns "
+            "a dict counting occurrences of each log level: ERROR, WARNING, and INFO. "
+            "Each line follows the format: '2024-01-01 LEVEL message'.\n\n"
+            "Example:\n"
+            "  Input: '2024-01-01 ERROR disk full\\n2024-01-01 INFO started\\n2024-01-01 ERROR crash'\n"
+            "  Output: {'ERROR': 2, 'WARNING': 0, 'INFO': 1}"
+        ),
+        "starter_code": "def solution(log_text: str) -> dict:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": 'solution("2024-01-01 ERROR disk full\\n2024-01-01 INFO started\\n2024-01-01 ERROR crash")',
+                "expected_output": "{'ERROR': 2, 'WARNING': 0, 'INFO': 1}",
+            },
+            {
+                "input": 'solution("2024-01-01 WARNING low memory")',
+                "expected_output": "{'ERROR': 0, 'WARNING': 1, 'INFO': 0}",
+            },
+            {
+                "input": 'solution("")',
+                "expected_output": "{'ERROR': 0, 'WARNING': 0, 'INFO': 0}",
+            },
+        ],
+        "hint": "Split the log on newlines. For each non-empty line, split on spaces and check the second word (the level). Initialise all three counts to 0 first.",
+        "solution": (
+            "def solution(log_text: str) -> dict:\n"
+            "    counts = {'ERROR': 0, 'WARNING': 0, 'INFO': 0}\n"
+            "    for line in log_text.strip().splitlines():\n"
+            "        if not line:\n"
+            "            continue\n"
+            "        parts = line.split()\n"
+            "        if len(parts) >= 2 and parts[1] in counts:\n"
+            "            counts[parts[1]] += 1\n"
+            "    return counts"
+        ),
+        "concepts": [
+            {
+                "title": "str.splitlines() vs split('\\n')",
+                "explanation": (
+                    "splitlines() splits on all line endings (\\n, \\r\\n, \\r) and never produces "
+                    "a trailing empty string. split('\\n') is simpler but can leave an empty string "
+                    "at the end if the text ends with a newline."
+                ),
+                "examples": [
+                    '"a\\nb\\n".split("\\n")    # ["a", "b", ""]  — trailing empty string',
+                    '"a\\nb\\n".splitlines()  # ["a", "b"]      — clean',
+                    '"a\\r\\nb".splitlines()  # ["a", "b"]      — handles Windows line endings',
+                ],
+                "watch_out": (
+                    "Always strip() or use splitlines() when parsing file content — "
+                    "trailing newlines create ghost empty lines that crash your parsing logic."
+                ),
+            },
+            {
+                "title": "Initialising Counts to Zero",
+                "explanation": (
+                    "Pre-populate the result dict with all expected keys set to 0. "
+                    "This guarantees every key is present in the output, even if the log has no entries of that level."
+                ),
+                "examples": [
+                    "counts = {'ERROR': 0, 'WARNING': 0, 'INFO': 0}",
+                    "# Now safe to do:",
+                    "counts['ERROR'] += 1   # no KeyError",
+                    "",
+                    "# Without pre-init you would need:",
+                    "counts['ERROR'] = counts.get('ERROR', 0) + 1",
+                ],
+                "watch_out": (
+                    "The insertion order of the pre-populated dict determines the print order. "
+                    "Python 3.7+ preserves insertion order, so {'ERROR':0,'WARNING':0,'INFO':0} "
+                    "will always print in that order."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.splitlines",
     },
 
 ]
