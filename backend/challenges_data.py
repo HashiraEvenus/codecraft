@@ -3420,4 +3420,969 @@ CHALLENGES = [
         ],
         "docs_url": "https://www.typescriptlang.org/docs/handbook/2/functions.html",
     },
+
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — BEGINNER (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "longest-word",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Longest Word in a Sentence",
+        "description": (
+            "Write a function called `solution` that takes a sentence string and returns "
+            "the longest word. If there is a tie, return the first longest word.\n\n"
+            "Example:\n  solution('the quick brown fox') → 'quick'\n  solution('I love Python') → 'Python'"
+        ),
+        "starter_code": "def solution(sentence: str) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("the quick brown fox")', "expected_output": "quick"},
+            {"input": 'solution("I love Python")',       "expected_output": "Python"},
+            {"input": 'solution("hello")',               "expected_output": "hello"},
+            {"input": 'solution("a bb ccc")',            "expected_output": "ccc"},
+        ],
+        "hint": "Split into words and use max() with len as the key function.",
+        "solution": (
+            "def solution(sentence: str) -> str:\n"
+            "    return max(sentence.split(), key=len)"
+        ),
+        "concepts": [
+            {
+                "title": "max() with a key Function",
+                "explanation": (
+                    "max() finds the largest item in an iterable. "
+                    "The key parameter lets you specify what to measure. "
+                    "max(words, key=len) finds the word with the greatest length."
+                ),
+                "examples": [
+                    'words = ["cat", "elephant", "ox"]',
+                    'max(words)           # "ox" — alphabetically last',
+                    'max(words, key=len)  # "elephant" — longest',
+                    'min(words, key=len)  # "ox" — shortest',
+                ],
+                "watch_out": (
+                    "max() with a tie returns the FIRST maximum it encounters. "
+                    "If two words have the same length, the one that appears first in the list wins — "
+                    "which is exactly what the problem requires."
+                ),
+            },
+            {
+                "title": "Passing Functions as Arguments",
+                "explanation": (
+                    "In Python, functions are objects — you can pass them around like values. "
+                    "key=len passes the len function itself (not the result of calling it). "
+                    "max() will call len(word) on each word internally."
+                ),
+                "examples": [
+                    'max(["a","bb"], key=len)    # "bb"',
+                    'sorted(["a","bb"], key=len) # ["a", "bb"]',
+                    "",
+                    "# key can be any callable — lambda or named function:",
+                    "max(nums, key=lambda x: abs(x))  # largest absolute value",
+                ],
+                "watch_out": (
+                    "key=len is correct. key=len() would call len with no arguments and raise a TypeError. "
+                    "Pass the function reference, not its result."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#max",
+    },
+
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — INTERMEDIATE (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "missing-number",
+        "topic": "arrays-strings",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Find the Missing Number",
+        "description": (
+            "You are given a list of n-1 distinct integers drawn from 1 to n. "
+            "Exactly one number is missing. Write a function called `solution` that finds it.\n\n"
+            "Do not sort the list.\n\n"
+            "Example:\n  solution([1, 2, 4, 5]) → 3   (n=5, missing 3)"
+        ),
+        "starter_code": "def solution(nums: list) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([1, 2, 4, 5])", "expected_output": "3"},
+            {"input": "solution([2, 3, 4, 5])", "expected_output": "1"},
+            {"input": "solution([1, 2, 3, 4])", "expected_output": "5"},
+            {"input": "solution([2])",           "expected_output": "1"},
+        ],
+        "hint": "The sum of 1..n is n*(n+1)//2. Subtract the actual sum of the list to find the gap.",
+        "solution": (
+            "def solution(nums: list) -> int:\n"
+            "    n = len(nums) + 1\n"
+            "    expected = n * (n + 1) // 2\n"
+            "    return expected - sum(nums)"
+        ),
+        "concepts": [
+            {
+                "title": "Gauss's Sum Formula  n*(n+1)//2",
+                "explanation": (
+                    "The sum of integers 1 through n equals n*(n+1)/2. "
+                    "This lets you compute the expected total instantly without a loop."
+                ),
+                "examples": [
+                    "# Sum of 1..5 = 1+2+3+4+5 = 15",
+                    "5 * (5 + 1) // 2   # 15",
+                    "# Sum of 1..100 = 5050",
+                    "100 * 101 // 2     # 5050",
+                ],
+                "watch_out": (
+                    "Use integer division // (not /) so you get an int, not a float. "
+                    "n*(n+1) is always even, so the result is always a whole number."
+                ),
+            },
+            {
+                "title": "sum() — Summing an Iterable",
+                "explanation": (
+                    "sum(iterable) adds all elements together. "
+                    "Combined with Gauss's formula: expected - actual = the missing number."
+                ),
+                "examples": [
+                    "sum([1, 2, 4, 5])   # 12",
+                    "# expected for n=5: 15",
+                    "# missing: 15 - 12 = 3",
+                ],
+                "watch_out": (
+                    "sum() starts from 0 by default. You can change the start: sum(nums, 10) begins at 10. "
+                    "For this problem the default of 0 is correct."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#sum",
+    },
+
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — ADVANCED (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "group-anagrams",
+        "topic": "arrays-strings",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Group Anagrams",
+        "description": (
+            "Write a function called `solution` that takes a list of words and groups "
+            "anagrams together. Return a list of groups. Each group preserves the original "
+            "word order. Groups appear in order of first occurrence.\n\n"
+            "Example:\n  solution(['eat','tea','tan','ate','nat','bat'])\n"
+            "  → [['eat','tea','ate'], ['tan','nat'], ['bat']]"
+        ),
+        "starter_code": "def solution(words: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": "solution(['eat','tea','tan','ate','nat','bat'])",
+                "expected_output": "[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]",
+            },
+            {
+                "input": "solution(['abc','bca','xyz'])",
+                "expected_output": "[['abc', 'bca'], ['xyz']]",
+            },
+            {
+                "input": "solution(['a'])",
+                "expected_output": "[['a']]",
+            },
+        ],
+        "hint": "Use a dict where the key is the sorted letters of each word. Append each word to its matching group.",
+        "solution": (
+            "def solution(words: list) -> list:\n"
+            "    groups = {}\n"
+            "    for word in words:\n"
+            "        key = ''.join(sorted(word))\n"
+            "        if key not in groups:\n"
+            "            groups[key] = []\n"
+            "        groups[key].append(word)\n"
+            "    return list(groups.values())"
+        ),
+        "concepts": [
+            {
+                "title": "Canonical Form as a Dict Key",
+                "explanation": (
+                    "To group 'equivalent' items, transform each into a canonical (standard) form "
+                    "and use that as the dict key. For anagrams, the canonical form is the sorted letters."
+                ),
+                "examples": [
+                    '"eat" → sorted → "aet"',
+                    '"tea" → sorted → "aet"  ← same key, same group',
+                    '"tan" → sorted → "ant"  ← different group',
+                    "",
+                    'groups["aet"] = ["eat", "tea", "ate"]',
+                    'groups["ant"] = ["tan", "nat"]',
+                ],
+                "watch_out": (
+                    "''.join(sorted(word)) turns the sorted character list back into a string "
+                    "so it can be used as a dict key. Lists are not hashable and cannot be keys."
+                ),
+            },
+            {
+                "title": "dict.values() and Insertion Order",
+                "explanation": (
+                    "dict.values() returns all values in insertion order (guaranteed since Python 3.7). "
+                    "Wrapping in list() materialises it into a proper list."
+                ),
+                "examples": [
+                    "d = {'aet': ['eat','tea'], 'ant': ['tan']}",
+                    "list(d.values())   # [['eat','tea'], ['tan']]",
+                ],
+                "watch_out": (
+                    "dict.values() is a live view — it reflects changes to the dict. "
+                    "Convert to list() before returning to get a stable snapshot."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#sorted",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — BEGINNER (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "is-power-of-two",
+        "topic": "algorithms",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Is Power of Two?",
+        "description": (
+            "Write a function called `solution` that takes an integer and returns True "
+            "if it is a power of 2 (1, 2, 4, 8, 16 …), False otherwise.\n\n"
+            "Example:\n  solution(16) → True\n  solution(6) → False"
+        ),
+        "starter_code": "def solution(n: int) -> bool:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(1)",  "expected_output": "True"},
+            {"input": "solution(2)",  "expected_output": "True"},
+            {"input": "solution(16)", "expected_output": "True"},
+            {"input": "solution(6)",  "expected_output": "False"},
+            {"input": "solution(0)",  "expected_output": "False"},
+        ],
+        "hint": "Keep dividing by 2. If you reach exactly 1, it is a power of 2. If you get an odd number before that, it is not.",
+        "solution": (
+            "def solution(n: int) -> bool:\n"
+            "    if n <= 0:\n"
+            "        return False\n"
+            "    while n > 1:\n"
+            "        if n % 2 != 0:\n"
+            "            return False\n"
+            "        n //= 2\n"
+            "    return True"
+        ),
+        "concepts": [
+            {
+                "title": "Repeated Division to Check Divisibility",
+                "explanation": (
+                    "A power of 2 can be divided by 2 all the way down to 1 with no remainder. "
+                    "If n % 2 != 0 at any point, it cannot be a power of 2."
+                ),
+                "examples": [
+                    "16 → 8 → 4 → 2 → 1  (all even)  → True",
+                    "6  → 3              (3 is odd)   → False",
+                    "1  → loop skipped                → True  (2^0 = 1)",
+                ],
+                "watch_out": (
+                    "n=0 must be handled up front. Without the guard, the while loop "
+                    "would never run and you'd return True incorrectly."
+                ),
+            },
+            {
+                "title": "Bit-Trick Bonus  n & (n-1) == 0",
+                "explanation": (
+                    "Powers of 2 have exactly one bit set. Subtracting 1 flips all lower bits. "
+                    "Their bitwise AND is always 0."
+                ),
+                "examples": [
+                    "# 16 = 10000b, 15 = 01111b",
+                    "16 & 15  # 0 → power of 2",
+                    "# 6  = 110b,  5  = 101b",
+                    "6  & 5   # 4 (non-zero) → not a power of 2",
+                    "",
+                    "# One-liner: n > 0 and (n & (n-1)) == 0",
+                ],
+                "watch_out": (
+                    "The bit trick is O(1) and elegant, but requires understanding binary. "
+                    "The loop approach is easier to reason about in an interview."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — INTERMEDIATE (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "insertion-sort",
+        "topic": "algorithms",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Insertion Sort",
+        "description": (
+            "Write a function called `solution` that sorts a list of integers in ascending order "
+            "using insertion sort. Return the sorted list. Do not use sort() or sorted().\n\n"
+            "Pick each element and insert it into its correct position among the already-sorted "
+            "elements to its left.\n\n"
+            "Example:\n  solution([5, 2, 4, 6, 1, 3]) → [1, 2, 3, 4, 5, 6]"
+        ),
+        "starter_code": "def solution(nums: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([5, 2, 4, 6, 1, 3])", "expected_output": "[1, 2, 3, 4, 5, 6]"},
+            {"input": "solution([3, 1, 2])",           "expected_output": "[1, 2, 3]"},
+            {"input": "solution([1])",                 "expected_output": "[1]"},
+            {"input": "solution([2, 2, 1])",           "expected_output": "[1, 2, 2]"},
+        ],
+        "hint": "For each element at index i, save it as 'key'. Shift larger elements one right until you find the correct slot, then place key there.",
+        "solution": (
+            "def solution(nums: list) -> list:\n"
+            "    nums = nums[:]\n"
+            "    for i in range(1, len(nums)):\n"
+            "        key = nums[i]\n"
+            "        j = i - 1\n"
+            "        while j >= 0 and nums[j] > key:\n"
+            "            nums[j + 1] = nums[j]\n"
+            "            j -= 1\n"
+            "        nums[j + 1] = key\n"
+            "    return nums"
+        ),
+        "concepts": [
+            {
+                "title": "Insertion Sort Inner Loop",
+                "explanation": (
+                    "Pick nums[i] as the 'key'. Walk leftward while elements are bigger. "
+                    "Shift each one right. When you stop, drop the key into the gap."
+                ),
+                "examples": [
+                    "# [5, 2, 4] — insert 2 at i=1:",
+                    "key=2, j=0",
+                    "nums[0]=5 > 2 → shift: [5, 5, 4]",
+                    "j=-1 → stop",
+                    "nums[0] = 2 → [2, 5, 4]",
+                ],
+                "watch_out": (
+                    "The while condition needs BOTH j >= 0 AND nums[j] > key. "
+                    "Omitting j >= 0 causes an IndexError when the key belongs at position 0."
+                ),
+            },
+            {
+                "title": "Insertion Sort vs Bubble Sort",
+                "explanation": (
+                    "Both are O(n²) worst case, but insertion sort is adaptive — "
+                    "it is O(n) on already-sorted input because the inner loop exits immediately."
+                ),
+                "examples": [
+                    "# [1, 2, 3, 5, 4] — nearly sorted:",
+                    "# Insertion: only fixes 5 and 4 — very fast",
+                    "# Bubble: still makes multiple full passes",
+                ],
+                "watch_out": (
+                    "Insertion sort is often used in practice for small arrays (< ~20 elements) "
+                    "because its low constant factor beats O(n log n) algorithms at small sizes."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/howto/sorting.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — ADVANCED (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "count-primes",
+        "topic": "algorithms",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Count Primes (Sieve of Eratosthenes)",
+        "description": (
+            "Write a function called `solution` that returns the count of prime numbers "
+            "strictly less than n. Use the Sieve of Eratosthenes for efficiency.\n\n"
+            "Example:\n  solution(10) → 4   (primes: 2, 3, 5, 7)\n  solution(20) → 8"
+        ),
+        "starter_code": "def solution(n: int) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(10)", "expected_output": "4"},
+            {"input": "solution(2)",  "expected_output": "0"},
+            {"input": "solution(20)", "expected_output": "8"},
+            {"input": "solution(1)",  "expected_output": "0"},
+        ],
+        "hint": "Create a bool list of size n, all True. Set index 0 and 1 to False. For each unmarked number, mark its multiples False. Count the Trues.",
+        "solution": (
+            "def solution(n: int) -> int:\n"
+            "    if n < 2:\n"
+            "        return 0\n"
+            "    is_prime = [True] * n\n"
+            "    is_prime[0] = is_prime[1] = False\n"
+            "    for i in range(2, int(n ** 0.5) + 1):\n"
+            "        if is_prime[i]:\n"
+            "            for j in range(i * i, n, i):\n"
+            "                is_prime[j] = False\n"
+            "    return sum(is_prime)"
+        ),
+        "concepts": [
+            {
+                "title": "The Sieve of Eratosthenes",
+                "explanation": (
+                    "Mark every number as prime. For each prime p (from 2 upward), "
+                    "cross out all multiples of p starting at p². "
+                    "What remains is every prime less than n."
+                ),
+                "examples": [
+                    "is_prime: [F,F,T,T,T,T,T,T,T,T]  # indices 0..9",
+                    "# p=2: mark 4,6,8   → [F,F,T,T,F,T,F,T,F,T]",
+                    "# p=3: mark 9       → [F,F,T,T,F,T,F,T,F,F]",
+                    "# sum = 4  (indices 2,3,5,7 are True)",
+                ],
+                "watch_out": (
+                    "The outer loop only needs to reach sqrt(n). "
+                    "Any composite number has a prime factor <= its square root, "
+                    "so everything is already crossed out by then."
+                ),
+            },
+            {
+                "title": "[True] * n and sum() on Booleans",
+                "explanation": (
+                    "Multiplying a list by n creates n copies. "
+                    "sum() counts True values because True == 1 in Python."
+                ),
+                "examples": [
+                    "[True] * 5         # [True, True, True, True, True]",
+                    "sum([True,False,True,True])  # 3",
+                ],
+                "watch_out": (
+                    "sum(is_prime) is a clean idiom. Avoid looping with a counter — "
+                    "the built-in sum is faster and more readable."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # DATA STRUCTURES — INTERMEDIATE (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "sum-nested-list",
+        "topic": "data-structures",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Sum a Nested List (Recursion)",
+        "description": (
+            "Write a function called `solution` that takes an arbitrarily nested list of integers "
+            "and returns the sum of all numbers at any depth.\n\n"
+            "Example:\n  solution([1, [2, 3], [4, [5, 6]]]) → 21\n  solution([[1, 2], [3, 4]]) → 10"
+        ),
+        "starter_code": "def solution(nested: list) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([1, [2, 3], [4, [5, 6]]])", "expected_output": "21"},
+            {"input": "solution([[1, 2], [3, 4]])",          "expected_output": "10"},
+            {"input": "solution([5])",                       "expected_output": "5"},
+            {"input": "solution([])",                        "expected_output": "0"},
+        ],
+        "hint": "For each item: if it is a list, call solution() on it recursively; if it is an int, add it directly.",
+        "solution": (
+            "def solution(nested: list) -> int:\n"
+            "    total = 0\n"
+            "    for item in nested:\n"
+            "        if isinstance(item, list):\n"
+            "            total += solution(item)\n"
+            "        else:\n"
+            "            total += item\n"
+            "    return total"
+        ),
+        "concepts": [
+            {
+                "title": "Recursion — Calling a Function from Itself",
+                "explanation": (
+                    "Recursion breaks a problem into a smaller version of itself. "
+                    "Base case: item is an integer — add it. "
+                    "Recursive case: item is a list — sum that sublist the same way."
+                ),
+                "examples": [
+                    "solution([1, [2, 3]])",
+                    "  → 1 + solution([2, 3])",
+                    "  → 1 + (2 + 3)",
+                    "  → 6",
+                ],
+                "watch_out": (
+                    "Every recursive function needs a base case to stop. "
+                    "Here, the base case is 'item is not a list'. "
+                    "Without it you get infinite recursion and a RecursionError."
+                ),
+            },
+            {
+                "title": "isinstance(obj, type) — Runtime Type Check",
+                "explanation": (
+                    "isinstance(x, list) returns True if x is a list. "
+                    "It is the Pythonic way to branch on an object's type."
+                ),
+                "examples": [
+                    "isinstance([1, 2], list)     # True",
+                    "isinstance(5, list)           # False",
+                    "isinstance(5, int)            # True",
+                    "isinstance(5, (int, float))  # True — check multiple types",
+                ],
+                "watch_out": (
+                    "Avoid type(x) == list — it fails for subclasses. "
+                    "isinstance handles inheritance correctly and is the preferred idiom."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#isinstance",
+    },
+
+    # ──────────────────────────────────────────────
+    # DATA STRUCTURES — ADVANCED (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "bfs-shortest-path",
+        "topic": "data-structures",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "BFS Shortest Path",
+        "description": (
+            "Given a directed graph as an adjacency dict, write a function called `solution` "
+            "that returns the number of edges in the shortest path from start to end. "
+            "Return -1 if no path exists. Return 0 if start == end.\n\n"
+            "Example:\n"
+            "  graph = {'A':['B','C'], 'B':['D'], 'C':['D'], 'D':[]}\n"
+            "  solution(graph, 'A', 'D') → 2"
+        ),
+        "starter_code": (
+            "from collections import deque\n\n"
+            "def solution(graph: dict, start: str, end: str) -> int:\n"
+            "    # Your code here\n"
+            "    pass"
+        ),
+        "test_cases": [
+            {
+                "input": "solution({'A':['B','C'],'B':['D'],'C':['D'],'D':[]}, 'A', 'D')",
+                "expected_output": "2",
+            },
+            {
+                "input": "solution({'A':['B'],'B':['C'],'C':[]}, 'A', 'C')",
+                "expected_output": "2",
+            },
+            {
+                "input": "solution({'A':[],'B':[]}, 'A', 'B')",
+                "expected_output": "-1",
+            },
+            {
+                "input": "solution({'A':['B'],'B':[]}, 'A', 'A')",
+                "expected_output": "0",
+            },
+        ],
+        "hint": "Use a deque. Store (node, distance) pairs. When you reach the destination, return the distance. Mark nodes visited when enqueued, not when processed.",
+        "solution": (
+            "from collections import deque\n\n"
+            "def solution(graph: dict, start: str, end: str) -> int:\n"
+            "    if start == end:\n"
+            "        return 0\n"
+            "    visited = {start}\n"
+            "    queue = deque([(start, 0)])\n"
+            "    while queue:\n"
+            "        node, dist = queue.popleft()\n"
+            "        for neighbour in graph.get(node, []):\n"
+            "            if neighbour == end:\n"
+            "                return dist + 1\n"
+            "            if neighbour not in visited:\n"
+            "                visited.add(neighbour)\n"
+            "                queue.append((neighbour, dist + 1))\n"
+            "    return -1"
+        ),
+        "concepts": [
+            {
+                "title": "BFS — Breadth-First Search",
+                "explanation": (
+                    "BFS explores level by level — all nodes 1 hop away first, then 2 hops, etc. "
+                    "The first time it reaches the destination is guaranteed to be the shortest path."
+                ),
+                "examples": [
+                    "# Graph: A→B, A→C, B→D",
+                    "# BFS from A:",
+                    "# Distance 0: [A]",
+                    "# Distance 1: [B, C]",
+                    "# Distance 2: [D]  ← first time we see D",
+                ],
+                "watch_out": (
+                    "DFS does NOT guarantee shortest path — it goes deep, not wide. "
+                    "Only BFS does, because shorter paths are always explored first."
+                ),
+            },
+            {
+                "title": "visited Set — Preventing Cycles",
+                "explanation": (
+                    "Without a visited set, cycles in the graph cause infinite loops. "
+                    "Mark nodes visited when they are added to the queue."
+                ),
+                "examples": [
+                    "visited = {start}",
+                    "if neighbour not in visited:",
+                    "    visited.add(neighbour)   # mark now, not on process",
+                    "    queue.append((neighbour, dist + 1))",
+                ],
+                "watch_out": (
+                    "Mark visited when ENQUEUING, not when DEQUEUING. "
+                    "Late marking allows the same node to be added multiple times, "
+                    "causing redundant work or incorrect distances."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/collections.html#collections.deque",
+    },
+
+    # ──────────────────────────────────────────────
+    # OOP — BEGINNER (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "simple-calculator",
+        "topic": "oop",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Simple Calculator Class",
+        "description": (
+            "Build a `Calculator` class that starts at 0 and supports:\n"
+            "  - add(n) — adds n to the result\n"
+            "  - subtract(n) — subtracts n\n"
+            "  - multiply(n) — multiplies by n\n"
+            "  - get_result() — returns the current result\n\n"
+            "Write `solution(ops)` where ops is a list of ('add', n), ('subtract', n), "
+            "or ('multiply', n) tuples. Return the final result.\n\n"
+            "Example:\n  solution([('add', 10), ('multiply', 3)]) → 30"
+        ),
+        "starter_code": (
+            "class Calculator:\n"
+            "    def __init__(self):\n"
+            "        pass\n\n"
+            "    def add(self, n: int):\n"
+            "        pass\n\n"
+            "    def subtract(self, n: int):\n"
+            "        pass\n\n"
+            "    def multiply(self, n: int):\n"
+            "        pass\n\n"
+            "    def get_result(self) -> int:\n"
+            "        pass\n\n\n"
+            "def solution(ops: list) -> int:\n"
+            "    pass"
+        ),
+        "test_cases": [
+            {"input": "solution([('add', 10), ('multiply', 3)])",               "expected_output": "30"},
+            {"input": "solution([('add', 10), ('subtract', 4)])",               "expected_output": "6"},
+            {"input": "solution([('add', 6), ('multiply', 7)])",                "expected_output": "42"},
+            {"input": "solution([('add', 10), ('multiply', 3), ('subtract', 5)])", "expected_output": "25"},
+        ],
+        "hint": "Store self.result = 0 in __init__. Each method updates self.result. get_result() just returns it.",
+        "solution": (
+            "class Calculator:\n"
+            "    def __init__(self):\n"
+            "        self.result = 0\n\n"
+            "    def add(self, n: int):\n"
+            "        self.result += n\n\n"
+            "    def subtract(self, n: int):\n"
+            "        self.result -= n\n\n"
+            "    def multiply(self, n: int):\n"
+            "        self.result *= n\n\n"
+            "    def get_result(self) -> int:\n"
+            "        return self.result\n\n\n"
+            "def solution(ops: list) -> int:\n"
+            "    calc = Calculator()\n"
+            "    for op, n in ops:\n"
+            "        if op == 'add':        calc.add(n)\n"
+            "        elif op == 'subtract': calc.subtract(n)\n"
+            "        elif op == 'multiply': calc.multiply(n)\n"
+            "    return calc.get_result()"
+        ),
+        "concepts": [
+            {
+                "title": "State — Objects Remember Values Between Calls",
+                "explanation": (
+                    "self.result persists between method calls. "
+                    "Each call to add() or multiply() modifies the stored state. "
+                    "get_result() reads it back. This is the core value of encapsulation."
+                ),
+                "examples": [
+                    "c = Calculator()",
+                    "c.add(10)       # self.result = 10",
+                    "c.multiply(3)   # self.result = 30",
+                    "c.get_result()  # 30",
+                ],
+                "watch_out": (
+                    "If you forget self. and write result = 0 in __init__, "
+                    "it creates a local variable that disappears immediately. "
+                    "State that must outlive a single method call MUST live on self."
+                ),
+            },
+            {
+                "title": "Tuple Unpacking in a for Loop",
+                "explanation": (
+                    "If each element of a list is a tuple, you can unpack it directly in the for statement."
+                ),
+                "examples": [
+                    "ops = [('add', 5), ('subtract', 2)]",
+                    "for op, n in ops:   # unpacks the tuple",
+                    "    print(op, n)    # 'add' 5 → 'subtract' 2",
+                ],
+                "watch_out": (
+                    "The number of variables must match the tuple length exactly. "
+                    "for op, n in ops fails if any tuple has more or fewer than 2 elements."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/classes.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # OOP — INTERMEDIATE (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "library-catalog",
+        "topic": "oop",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Library Catalog",
+        "description": (
+            "Write a class called `Library` with:\n"
+            "  - add(title, author) — register a book\n"
+            "  - find_by_author(author) — return a sorted list of titles by that author\n\n"
+            "Write `solution(books, author)` where books is a list of (title, author) tuples. "
+            "Return the alphabetically sorted list of titles by the given author.\n\n"
+            "Example:\n"
+            "  solution([('Fluent Python','Matthes'),('Clean Code','Martin'),\n"
+            "             ('Python Crash Course','Matthes')], 'Matthes')\n"
+            "  → ['Fluent Python', 'Python Crash Course']"
+        ),
+        "starter_code": (
+            "class Library:\n"
+            "    def __init__(self):\n"
+            "        pass\n\n"
+            "    def add(self, title: str, author: str):\n"
+            "        pass\n\n"
+            "    def find_by_author(self, author: str) -> list:\n"
+            "        pass\n\n\n"
+            "def solution(books: list, author: str) -> list:\n"
+            "    pass"
+        ),
+        "test_cases": [
+            {
+                "input": "solution([('Fluent Python','Matthes'),('Clean Code','Martin'),('Python Crash Course','Matthes')], 'Matthes')",
+                "expected_output": "['Fluent Python', 'Python Crash Course']",
+            },
+            {
+                "input": "solution([('Clean Code','Martin')], 'Martin')",
+                "expected_output": "['Clean Code']",
+            },
+            {
+                "input": "solution([('Clean Code','Martin')], 'Beck')",
+                "expected_output": "[]",
+            },
+        ],
+        "hint": "Store books in a list of tuples. find_by_author filters by author and sorts with sorted().",
+        "solution": (
+            "class Library:\n"
+            "    def __init__(self):\n"
+            "        self.books = []\n\n"
+            "    def add(self, title: str, author: str):\n"
+            "        self.books.append((title, author))\n\n"
+            "    def find_by_author(self, author: str) -> list:\n"
+            "        return sorted(t for t, a in self.books if a == author)\n\n\n"
+            "def solution(books: list, author: str) -> list:\n"
+            "    lib = Library()\n"
+            "    for title, auth in books:\n"
+            "        lib.add(title, auth)\n"
+            "    return lib.find_by_author(author)"
+        ),
+        "concepts": [
+            {
+                "title": "Filtering with a Generator in sorted()",
+                "explanation": (
+                    "sorted() accepts any iterable, including a generator expression. "
+                    "You can filter and sort in one clean line."
+                ),
+                "examples": [
+                    "books = [('Fluent Python','Matthes'), ('Clean Code','Martin')]",
+                    "sorted(t for t, a in books if a == 'Matthes')",
+                    "# ['Fluent Python']",
+                ],
+                "watch_out": (
+                    "sorted() always returns a new list. "
+                    "If no books match, the generator produces nothing and sorted() returns []."
+                ),
+            },
+            {
+                "title": "Choosing Your Internal Data Structure",
+                "explanation": (
+                    "A list of tuples is simple and naturally ordered. "
+                    "A dict (title→author) is faster for direct title lookups but loses ordering. "
+                    "Choose based on which operations you perform most."
+                ),
+                "examples": [
+                    "# List — good for iterating, filtering:",
+                    "self.books = [('Fluent Python', 'Matthes')]",
+                    "",
+                    "# Dict — good for O(1) title lookup:",
+                    "self.books = {'Fluent Python': 'Matthes'}",
+                ],
+                "watch_out": (
+                    "A dict keyed by title allows only one book per title. "
+                    "A list allows duplicates. Think about which your design actually needs."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#sorted",
+    },
+
+    # ──────────────────────────────────────────────
+    # BEST PRACTICES — BEGINNER (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "label-items",
+        "topic": "best-practices",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Label Items with enumerate()",
+        "description": (
+            "Write a function called `solution` that takes a list of strings and returns "
+            "a new list where each item is prefixed with its index: '0: apple'.\n\n"
+            "Use enumerate() — not a manual counter variable.\n\n"
+            "Example:\n  solution(['apple','banana','cherry']) → ['0: apple','1: banana','2: cherry']"
+        ),
+        "starter_code": "def solution(items: list) -> list:\n    # Use enumerate()\n    pass",
+        "test_cases": [
+            {
+                "input": "solution(['apple','banana','cherry'])",
+                "expected_output": "['0: apple', '1: banana', '2: cherry']",
+            },
+            {"input": "solution(['only'])", "expected_output": "['0: only']"},
+            {"input": "solution([])",       "expected_output": "[]"},
+        ],
+        "hint": "enumerate(items) gives (index, value) pairs. Use an f-string to format each label.",
+        "solution": (
+            "def solution(items: list) -> list:\n"
+            "    return [f'{i}: {item}' for i, item in enumerate(items)]"
+        ),
+        "concepts": [
+            {
+                "title": "enumerate() — Index + Value Together",
+                "explanation": (
+                    "enumerate(iterable) yields (index, value) pairs. "
+                    "It replaces the common pattern of maintaining a separate counter."
+                ),
+                "examples": [
+                    "for i, val in enumerate(['a','b','c']):",
+                    "    print(i, val)   # 0 a, 1 b, 2 c",
+                    "",
+                    "# Start from 1:",
+                    "for i, val in enumerate(['a','b'], start=1):",
+                    "    print(i, val)   # 1 a, 2 b",
+                ],
+                "watch_out": (
+                    "for i, val in enumerate(items) is cleaner than for i in range(len(items)). "
+                    "The range(len(...)) idiom is widely considered un-Pythonic."
+                ),
+            },
+            {
+                "title": "f-Strings — Inline Formatting",
+                "explanation": (
+                    "f-strings embed expressions directly in a string using {}. "
+                    "Cleaner and faster than .format() or % formatting."
+                ),
+                "examples": [
+                    'f"{0}: apple"     # "0: apple"',
+                    'i, item = 2, "cherry"',
+                    'f"{i}: {item}"    # "2: cherry"',
+                    'f"{2 + 2}"        # "4"  — any expression works',
+                ],
+                "watch_out": (
+                    "f-strings require Python 3.6+. "
+                    "For older code you may see '{}: {}'.format(i, item). "
+                    "f-strings are the modern standard — always prefer them."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#enumerate",
+    },
+
+    # ──────────────────────────────────────────────
+    # SCRIPTING — BEGINNER (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "file-name-sanitizer",
+        "topic": "scripting",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "File Name Sanitizer",
+        "description": (
+            "Write a function called `solution` that cleans a file name by:\n"
+            "  1. Converting all characters to lowercase\n"
+            "  2. Replacing all spaces with underscores\n\n"
+            "Return the sanitized name.\n\n"
+            "Example:\n  solution('Hello World.txt') → 'hello_world.txt'\n"
+            "  solution('My Script.PY') → 'my_script.py'"
+        ),
+        "starter_code": "def solution(filename: str) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("Hello World.txt")',   "expected_output": "hello_world.txt"},
+            {"input": 'solution("My Script.PY")',      "expected_output": "my_script.py"},
+            {"input": 'solution("already_clean.py")',  "expected_output": "already_clean.py"},
+            {"input": 'solution("test file 123.txt")', "expected_output": "test_file_123.txt"},
+        ],
+        "hint": "Chain str methods: lower() then replace(' ', '_'). String methods return new strings, so they can be chained.",
+        "solution": (
+            "def solution(filename: str) -> str:\n"
+            "    return filename.lower().replace(' ', '_')"
+        ),
+        "concepts": [
+            {
+                "title": "Method Chaining on Strings",
+                "explanation": (
+                    "String methods return a new string, so you can call another method "
+                    "immediately on the result. This is called method chaining."
+                ),
+                "examples": [
+                    '"Hello World".lower()                   # "hello world"',
+                    '"Hello World".lower().replace(" ","_")  # "hello_world"',
+                    "",
+                    "# Equivalent with variables:",
+                    's = "Hello World"',
+                    's = s.lower()',
+                    's = s.replace(" ", "_")',
+                ],
+                "watch_out": (
+                    "Order matters. lower() then replace() is clearest here. "
+                    "In general, think about what each step produces before chaining further."
+                ),
+            },
+            {
+                "title": "str.replace(old, new)",
+                "explanation": (
+                    "replace() substitutes every occurrence of old with new. "
+                    "Strings are immutable, so it returns a new string."
+                ),
+                "examples": [
+                    '"hello world".replace(" ", "_")   # "hello_world"',
+                    '"aabaa".replace("a", "x")         # "xxbxx"',
+                    '"hello".replace("z", "x")         # "hello" — no match, no change',
+                ],
+                "watch_out": (
+                    "replace() replaces ALL occurrences. "
+                    "Use replace(old, new, count) to cap replacements: 'aaa'.replace('a','b',2) → 'bba'."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.replace",
+    },
+
 ]
