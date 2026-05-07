@@ -4385,4 +4385,882 @@ CHALLENGES = [
         "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.replace",
     },
 
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — BEGINNER (batch 4)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "prime-checker",
+        "topic": "algorithms",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Is Prime?",
+        "description": (
+            "Write a function called `solution` that takes an integer and returns True "
+            "if it is a prime number, False otherwise.\n"
+            "A prime is a number greater than 1 that has no divisors other than 1 and itself.\n\n"
+            "Example:\n  solution(7) → True\n  solution(4) → False"
+        ),
+        "starter_code": "def solution(n: int) -> bool:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(2)",  "expected_output": "True"},
+            {"input": "solution(7)",  "expected_output": "True"},
+            {"input": "solution(1)",  "expected_output": "False"},
+            {"input": "solution(4)",  "expected_output": "False"},
+            {"input": "solution(13)", "expected_output": "True"},
+        ],
+        "hint": "Check divisors from 2 up to the square root of n. If any divide n evenly, it's not prime.",
+        "solution": (
+            "def solution(n: int) -> bool:\n"
+            "    if n < 2:\n"
+            "        return False\n"
+            "    for i in range(2, int(n ** 0.5) + 1):\n"
+            "        if n % i == 0:\n"
+            "            return False\n"
+            "    return True"
+        ),
+        "concepts": [
+            {
+                "title": "Only Check Up to sqrt(n)",
+                "explanation": (
+                    "If n has a divisor larger than its square root, it must also have one smaller than it. "
+                    "So checking up to sqrt(n) is sufficient — and much faster than checking all the way to n."
+                ),
+                "examples": [
+                    "# Is 36 prime? sqrt(36) = 6",
+                    "# Divisors of 36: 2,3,4,6 — all <= 6",
+                    "# Once you find 2 divides 36, you're done",
+                    "",
+                    "int(n ** 0.5) + 1  # upper bound for range()",
+                ],
+                "watch_out": (
+                    "int(n ** 0.5) truncates the float. Adding 1 ensures you include the square root itself. "
+                    "For example, sqrt(25) = 5.0 → int = 5 → range(2, 6) checks 2,3,4,5 — 5 is tested."
+                ),
+            },
+            {
+                "title": "n % i == 0 — The Divisibility Test",
+                "explanation": (
+                    "n % i gives the remainder when n is divided by i. "
+                    "If it is 0, i divides n evenly — so n is NOT prime."
+                ),
+                "examples": [
+                    "10 % 2  # 0  → 2 divides 10 → not prime",
+                    "7  % 2  # 1  → 2 doesn't divide 7",
+                    "7  % 3  # 1  → 3 doesn't divide 7",
+                    "7  % 4  # 3  → no divisor found → prime",
+                ],
+                "watch_out": (
+                    "Handle n < 2 before the loop. 0 and 1 are not prime by definition, "
+                    "and the loop would incorrectly return True for them."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#pow",
+    },
+
+    {
+        "id": "most-frequent",
+        "topic": "algorithms",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Most Frequent Element",
+        "description": (
+            "Write a function called `solution` that takes a non-empty list and returns "
+            "the element that appears most often. If there is a tie, return the first one encountered.\n\n"
+            "Example:\n  solution([1, 2, 2, 3, 3, 3]) → 3\n  solution(['a', 'b', 'a']) → 'a'"
+        ),
+        "starter_code": "def solution(items: list):\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([1, 2, 2, 3, 3, 3])",     "expected_output": "3"},
+            {"input": "solution(['a', 'b', 'a'])",          "expected_output": "a"},
+            {"input": "solution([5])",                      "expected_output": "5"},
+            {"input": "solution([1, 1, 2, 2])",            "expected_output": "1"},
+        ],
+        "hint": "Build a frequency dict first, then find the key with the highest value using max() with a key function.",
+        "solution": (
+            "def solution(items: list):\n"
+            "    counts = {}\n"
+            "    for item in items:\n"
+            "        counts[item] = counts.get(item, 0) + 1\n"
+            "    return max(counts, key=lambda k: counts[k])"
+        ),
+        "concepts": [
+            {
+                "title": "max() Over Dict Keys",
+                "explanation": (
+                    "Calling max(some_dict) iterates over the keys. "
+                    "Pairing it with key=lambda k: counts[k] means 'find the key whose value is largest'."
+                ),
+                "examples": [
+                    "counts = {'a': 1, 'b': 3, 'c': 2}",
+                    "max(counts)                       # 'c' — alphabetically largest key",
+                    "max(counts, key=lambda k: counts[k])  # 'b' — key with highest count",
+                ],
+                "watch_out": (
+                    "max() on a dict iterates keys, NOT values. "
+                    "Without the key argument you get the lexicographically largest key, "
+                    "which is almost never what you want."
+                ),
+            },
+            {
+                "title": "collections.Counter — The Shortcut",
+                "explanation": (
+                    "Python's Counter class builds a frequency dict automatically. "
+                    "most_common(1) returns the [(element, count)] pair with the highest count."
+                ),
+                "examples": [
+                    "from collections import Counter",
+                    "c = Counter([1, 2, 2, 3, 3, 3])",
+                    "c                    # Counter({3:3, 2:2, 1:1})",
+                    "c.most_common(1)     # [(3, 3)]",
+                    "c.most_common(1)[0][0]  # 3",
+                ],
+                "watch_out": (
+                    "Counter.most_common() returns a list of (element, count) tuples sorted by count. "
+                    "Index [0][0] gets the element itself."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/collections.html#collections.Counter",
+    },
+
+    # ──────────────────────────────────────────────
+    # ALGORITHMS — ADVANCED (batch 4)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "max-subarray",
+        "topic": "algorithms",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Maximum Subarray (Kadane's Algorithm)",
+        "description": (
+            "Write a function called `solution` that takes a list of integers and returns "
+            "the largest sum of any contiguous subarray.\n\n"
+            "Example:\n  solution([-2, 1, -3, 4, -1, 2, 1, -5, 4]) → 6\n"
+            "  (subarray [4, -1, 2, 1] sums to 6)"
+        ),
+        "starter_code": "def solution(nums: list) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([-2, 1, -3, 4, -1, 2, 1, -5, 4])", "expected_output": "6"},
+            {"input": "solution([1])",                               "expected_output": "1"},
+            {"input": "solution([-1, -2, -3])",                     "expected_output": "-1"},
+            {"input": "solution([5, 4, -1, 7, 8])",                 "expected_output": "23"},
+        ],
+        "hint": "Keep a running sum. If the running sum goes negative, reset it to 0 (start a fresh subarray). Track the best sum seen.",
+        "solution": (
+            "def solution(nums: list) -> int:\n"
+            "    max_sum = nums[0]\n"
+            "    current = nums[0]\n"
+            "    for num in nums[1:]:\n"
+            "        current = max(num, current + num)\n"
+            "        max_sum = max(max_sum, current)\n"
+            "    return max_sum"
+        ),
+        "concepts": [
+            {
+                "title": "Kadane's Algorithm",
+                "explanation": (
+                    "At each position, decide: is it better to extend the current subarray, "
+                    "or start fresh from this element? "
+                    "current = max(num, current + num). "
+                    "Track the global best in max_sum."
+                ),
+                "examples": [
+                    "nums = [-2, 1, -3, 4, -1, 2, 1]",
+                    "# current: -2, 1, -2, 4, 3, 5, 6",
+                    "# max_sum: -2, 1,  1, 4, 4, 5, 6",
+                    "# Answer: 6",
+                ],
+                "watch_out": (
+                    "Initialise max_sum and current to nums[0], NOT to 0. "
+                    "If all numbers are negative, the answer is the least negative number — "
+                    "starting at 0 would incorrectly return 0."
+                ),
+            },
+            {
+                "title": "max(a, b) as a Decision",
+                "explanation": (
+                    "max(num, current + num) is a one-liner for: "
+                    "'if extending the subarray helps, extend it; otherwise start fresh here'."
+                ),
+                "examples": [
+                    "# current = -5, num = 4:",
+                    "max(4, -5 + 4)   # max(4, -1) = 4 → start fresh",
+                    "",
+                    "# current = 3, num = 2:",
+                    "max(2, 3 + 2)    # max(2, 5) = 5 → extend",
+                ],
+                "watch_out": (
+                    "This is O(n) time and O(1) space — far better than the O(n²) brute-force "
+                    "of checking every possible subarray. Kadane's is the standard interview answer."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#max",
+    },
+
+    {
+        "id": "merge-intervals",
+        "topic": "algorithms",
+        "difficulty": "advanced",
+        "language": "python",
+        "title": "Merge Overlapping Intervals",
+        "description": (
+            "Write a function called `solution` that takes a list of [start, end] intervals "
+            "and merges all overlapping ones. Return the merged intervals sorted by start.\n\n"
+            "Example:\n  solution([[1,3],[2,6],[8,10],[15,18]]) → [[1,6],[8,10],[15,18]]"
+        ),
+        "starter_code": "def solution(intervals: list) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([[1,3],[2,6],[8,10],[15,18]])", "expected_output": "[[1, 6], [8, 10], [15, 18]]"},
+            {"input": "solution([[1,4],[4,5]])",                "expected_output": "[[1, 5]]"},
+            {"input": "solution([[1,2]])",                      "expected_output": "[[1, 2]]"},
+            {"input": "solution([[6,8],[1,9],[2,4]])",          "expected_output": "[[1, 9]]"},
+        ],
+        "hint": "Sort by start time. Walk through and if the current interval overlaps the last merged one (start <= last end), extend it; otherwise append a new interval.",
+        "solution": (
+            "def solution(intervals: list) -> list:\n"
+            "    intervals.sort(key=lambda x: x[0])\n"
+            "    merged = [intervals[0][:]]\n"
+            "    for start, end in intervals[1:]:\n"
+            "        if start <= merged[-1][1]:\n"
+            "            merged[-1][1] = max(merged[-1][1], end)\n"
+            "        else:\n"
+            "            merged.append([start, end])\n"
+            "    return merged"
+        ),
+        "concepts": [
+            {
+                "title": "Sort First, Then One Pass",
+                "explanation": (
+                    "Sorting by start time guarantees that any overlapping interval must "
+                    "be adjacent after sorting. This reduces the problem to a single linear scan."
+                ),
+                "examples": [
+                    "[[2,6],[1,3],[8,10]] → sorted → [[1,3],[2,6],[8,10]]",
+                    "# Now [2,6] is right after [1,3] — easy to detect overlap",
+                ],
+                "watch_out": (
+                    "Without sorting, you would need O(n²) to check every pair. "
+                    "Sorting first makes the algorithm O(n log n) — the sort dominates."
+                ),
+            },
+            {
+                "title": "Detecting and Merging Overlap",
+                "explanation": (
+                    "Two intervals [a, b] and [c, d] overlap when c <= b. "
+                    "The merged interval is [a, max(b, d)] — take the wider end."
+                ),
+                "examples": [
+                    "# [1,3] and [2,6]: 2 <= 3 → overlap",
+                    "# merged: [1, max(3,6)] = [1, 6]",
+                    "",
+                    "# [1,6] and [8,10]: 8 > 6 → no overlap",
+                    "# append [8,10] as a new interval",
+                ],
+                "watch_out": (
+                    "Use max(last_end, end) when merging — don't just take end. "
+                    "A fully contained interval like [1,10] and [2,5] should produce [1,10], "
+                    "but naively taking end=5 would shrink it incorrectly."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/howto/sorting.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — BEGINNER (batch 4)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "chunk-list",
+        "topic": "arrays-strings",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Split List into Chunks",
+        "description": (
+            "Write a function called `solution` that takes a list and an integer n, "
+            "and returns the list split into sublists of size n. "
+            "The last chunk may be smaller if the list doesn't divide evenly.\n\n"
+            "Example:\n  solution([1,2,3,4,5], 2) → [[1,2],[3,4],[5]]"
+        ),
+        "starter_code": "def solution(items: list, n: int) -> list:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([1,2,3,4,5], 2)", "expected_output": "[[1, 2], [3, 4], [5]]"},
+            {"input": "solution([1,2,3], 3)",      "expected_output": "[[1, 2, 3]]"},
+            {"input": "solution([], 2)",            "expected_output": "[]"},
+            {"input": "solution([1,2], 1)",         "expected_output": "[[1], [2]]"},
+        ],
+        "hint": "Use range(0, len(items), n) to step through starting indices, then slice items[i:i+n] for each.",
+        "solution": (
+            "def solution(items: list, n: int) -> list:\n"
+            "    return [items[i:i + n] for i in range(0, len(items), n)]"
+        ),
+        "concepts": [
+            {
+                "title": "range(start, stop, step) — Stepping Through Indices",
+                "explanation": (
+                    "range(0, len(items), n) generates starting indices 0, n, 2n, 3n, … "
+                    "For each index i, items[i:i+n] gives the next chunk."
+                ),
+                "examples": [
+                    "list(range(0, 10, 3))   # [0, 3, 6, 9]",
+                    "items = [1,2,3,4,5]",
+                    "items[0:2]  # [1, 2]",
+                    "items[2:4]  # [3, 4]",
+                    "items[4:6]  # [5]   — slice past end is safe",
+                ],
+                "watch_out": (
+                    "items[i:i+n] never raises an IndexError even if i+n > len(items). "
+                    "Python slicing clamps silently, so the last chunk is naturally shorter."
+                ),
+            },
+            {
+                "title": "List Comprehension Over a Range",
+                "explanation": (
+                    "You can put any expression inside a list comprehension — "
+                    "including a slice. This is a clean one-liner for chunking."
+                ),
+                "examples": [
+                    "[items[i:i+n] for i in range(0, len(items), n)]",
+                    "# For items=[1..5], n=2:",
+                    "# i=0 → [1,2]",
+                    "# i=2 → [3,4]",
+                    "# i=4 → [5]",
+                ],
+                "watch_out": (
+                    "range(0, 0, n) is empty, so an empty list returns [] correctly — "
+                    "the comprehension produces zero iterations."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#func-range",
+    },
+
+    # ──────────────────────────────────────────────
+    # ARRAYS & STRINGS — INTERMEDIATE (batch 4)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "longest-common-prefix",
+        "topic": "arrays-strings",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Longest Common Prefix",
+        "description": (
+            "Write a function called `solution` that takes a list of strings and returns "
+            "the longest prefix shared by all of them. Return an empty string if there is none.\n\n"
+            "Example:\n  solution(['flower','flow','flight']) → 'fl'\n"
+            "  solution(['dog','racecar','car']) → ''"
+        ),
+        "starter_code": "def solution(words: list) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(['flower','flow','flight'])", "expected_output": "fl"},
+            {"input": "solution(['dog','racecar','car'])",    "expected_output": ""},
+            {"input": "solution(['abc','abc','abc'])",        "expected_output": "abc"},
+            {"input": "solution(['a'])",                     "expected_output": "a"},
+        ],
+        "hint": "Use the first word as the reference. Keep trimming one character from the end until all words start with the current prefix.",
+        "solution": (
+            "def solution(words: list) -> str:\n"
+            "    if not words:\n"
+            "        return ''\n"
+            "    prefix = words[0]\n"
+            "    for word in words[1:]:\n"
+            "        while not word.startswith(prefix):\n"
+            "            prefix = prefix[:-1]\n"
+            "            if not prefix:\n"
+            "                return ''\n"
+            "    return prefix"
+        ),
+        "concepts": [
+            {
+                "title": "str.startswith(prefix)",
+                "explanation": (
+                    "startswith() returns True if the string begins with the given prefix. "
+                    "It is cleaner and faster than slicing s[:len(prefix)] == prefix."
+                ),
+                "examples": [
+                    '"flower".startswith("fl")   # True',
+                    '"flight".startswith("fl")   # True',
+                    '"dog".startswith("fl")      # False',
+                    '"".startswith("")           # True — empty prefix matches everything',
+                ],
+                "watch_out": (
+                    "startswith('') is always True for any string. "
+                    "The inner while loop exits as soon as prefix becomes empty, "
+                    "so you need to check for that and return '' early."
+                ),
+            },
+            {
+                "title": "Shrinking a String  s[:-1]",
+                "explanation": (
+                    "s[:-1] returns everything except the last character. "
+                    "Repeatedly applying it trims the string one character at a time."
+                ),
+                "examples": [
+                    '"flower"[:-1]   # "flowe"',
+                    '"flowe"[:-1]    # "flow"',
+                    '"flow"[:-1]     # "flo"',
+                    '"f"[:-1]        # ""  — empty string',
+                ],
+                "watch_out": (
+                    '"[:-1] on an empty string returns "" without error, '
+                    "but the while condition 'while not word.startswith(prefix)' "
+                    "would loop forever on '' since startswith('') is always True. "
+                    "Always add: if not prefix: return ''."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.startswith",
+    },
+
+    {
+        "id": "matrix-diagonal-sum",
+        "topic": "arrays-strings",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Matrix Diagonal Sum",
+        "description": (
+            "Write a function called `solution` that takes a square matrix (list of lists) "
+            "and returns the sum of its main diagonal (top-left to bottom-right).\n\n"
+            "Example:\n  solution([[1,2,3],[4,5,6],[7,8,9]]) → 15   (1 + 5 + 9)"
+        ),
+        "starter_code": "def solution(matrix: list) -> int:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution([[1,2,3],[4,5,6],[7,8,9]])", "expected_output": "15"},
+            {"input": "solution([[1,0],[0,1]])",             "expected_output": "2"},
+            {"input": "solution([[5]])",                     "expected_output": "5"},
+            {"input": "solution([[1,2],[3,4]])",             "expected_output": "5"},
+        ],
+        "hint": "The main diagonal consists of elements where row index == column index. Sum matrix[i][i] for i in range(len(matrix)).",
+        "solution": (
+            "def solution(matrix: list) -> int:\n"
+            "    return sum(matrix[i][i] for i in range(len(matrix)))"
+        ),
+        "concepts": [
+            {
+                "title": "Accessing a Matrix Cell  matrix[row][col]",
+                "explanation": (
+                    "A matrix is a list of lists. matrix[i] gives row i. "
+                    "matrix[i][j] gives the element at row i, column j."
+                ),
+                "examples": [
+                    "m = [[1,2,3],[4,5,6],[7,8,9]]",
+                    "m[0]      # [1, 2, 3]  — row 0",
+                    "m[0][0]   # 1  — top-left",
+                    "m[1][1]   # 5  — centre",
+                    "m[2][2]   # 9  — bottom-right",
+                ],
+                "watch_out": (
+                    "matrix[i][i] only gives the MAIN diagonal. "
+                    "The anti-diagonal (top-right to bottom-left) uses matrix[i][n-1-i]."
+                ),
+            },
+            {
+                "title": "Generator Expression with sum()",
+                "explanation": (
+                    "sum(matrix[i][i] for i in range(len(matrix))) is a clean one-liner. "
+                    "It avoids creating an intermediate list."
+                ),
+                "examples": [
+                    "m = [[1,2],[3,4]]",
+                    "sum(m[i][i] for i in range(2))  # m[0][0]+m[1][1] = 1+4 = 5",
+                ],
+                "watch_out": (
+                    "This assumes the matrix is square (n × n). "
+                    "If rows and columns differ, len(matrix) != len(matrix[0]) "
+                    "and you may need to use min(len(matrix), len(matrix[0]))."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html",
+    },
+
+    # ──────────────────────────────────────────────
+    # BEST PRACTICES — BEGINNER (batch 4)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "zip-to-dict",
+        "topic": "best-practices",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Zip Two Lists into a Dict",
+        "description": (
+            "Write a function called `solution` that takes a list of keys and a list of values "
+            "and returns a dictionary pairing them up. Use zip() — not a manual loop.\n\n"
+            "Example:\n  solution(['a','b','c'], [1,2,3]) → {'a':1,'b':2,'c':3}"
+        ),
+        "starter_code": "def solution(keys: list, values: list) -> dict:\n    # Use zip()\n    pass",
+        "test_cases": [
+            {"input": "solution(['a','b','c'], [1,2,3])",  "expected_output": "{'a': 1, 'b': 2, 'c': 3}"},
+            {"input": "solution(['x'], [42])",             "expected_output": "{'x': 42}"},
+            {"input": "solution([], [])",                  "expected_output": "{}"},
+        ],
+        "hint": "dict(zip(keys, values)) is a Python one-liner. zip() pairs elements by position, dict() converts the pairs.",
+        "solution": (
+            "def solution(keys: list, values: list) -> dict:\n"
+            "    return dict(zip(keys, values))"
+        ),
+        "concepts": [
+            {
+                "title": "zip() + dict() — The Classic Combo",
+                "explanation": (
+                    "zip(keys, values) produces pairs: (keys[0],values[0]), (keys[1],values[1]) … "
+                    "dict() turns a sequence of (key, value) pairs into a dictionary."
+                ),
+                "examples": [
+                    "keys   = ['a', 'b', 'c']",
+                    "values = [1,   2,   3  ]",
+                    "list(zip(keys, values))      # [('a',1), ('b',2), ('c',3)]",
+                    "dict(zip(keys, values))      # {'a':1, 'b':2, 'c':3}",
+                ],
+                "watch_out": (
+                    "zip() stops at the shorter list. "
+                    "If keys=['a','b','c'] and values=[1,2], the result is {'a':1,'b':2} — 'c' is dropped silently."
+                ),
+            },
+            {
+                "title": "dict() Constructor Forms",
+                "explanation": (
+                    "dict() can be called several ways. Knowing them all is useful."
+                ),
+                "examples": [
+                    "dict(a=1, b=2)                 # {'a':1,'b':2} — keyword args",
+                    "dict([('a',1),('b',2)])        # {'a':1,'b':2} — list of pairs",
+                    "dict(zip(keys, values))        # {'a':1,'b':2} — zip pairs",
+                    "{k: v for k,v in zip(keys,values)}  # dict comprehension",
+                ],
+                "watch_out": (
+                    "dict(a=1) only works when keys are valid Python identifiers (no spaces, no numbers first). "
+                    "dict(zip(...)) works for any hashable keys."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/functions.html#zip",
+    },
+
+    # ──────────────────────────────────────────────
+    # BEST PRACTICES — INTERMEDIATE (batch 2)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "flatten-dict",
+        "topic": "best-practices",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Flatten a Nested Dict",
+        "description": (
+            "Write a function called `solution` that takes a nested dictionary (one level deep) "
+            "and returns a flat dict where nested keys are joined with a dot.\n\n"
+            "Example:\n  solution({'a': {'b': 1, 'c': 2}, 'd': 3})\n  → {'a.b': 1, 'a.c': 2, 'd': 3}"
+        ),
+        "starter_code": "def solution(nested: dict) -> dict:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": "solution({'a': {'b': 1, 'c': 2}, 'd': 3})",
+                "expected_output": "{'a.b': 1, 'a.c': 2, 'd': 3}",
+            },
+            {
+                "input": "solution({'x': 1})",
+                "expected_output": "{'x': 1}",
+            },
+            {
+                "input": "solution({})",
+                "expected_output": "{}",
+            },
+        ],
+        "hint": "Iterate items(). If the value is a dict, iterate its items and build 'outer.inner' keys. Otherwise keep the key as-is.",
+        "solution": (
+            "def solution(nested: dict) -> dict:\n"
+            "    flat = {}\n"
+            "    for key, value in nested.items():\n"
+            "        if isinstance(value, dict):\n"
+            "            for sub_key, sub_val in value.items():\n"
+            "                flat[f'{key}.{sub_key}'] = sub_val\n"
+            "        else:\n"
+            "            flat[key] = value\n"
+            "    return flat"
+        ),
+        "concepts": [
+            {
+                "title": "Iterating Nested Dicts with .items()",
+                "explanation": (
+                    "dict.items() yields (key, value) pairs. "
+                    "When the value is itself a dict, you can call .items() on it again "
+                    "to iterate one level deeper."
+                ),
+                "examples": [
+                    "d = {'a': {'b': 1, 'c': 2}}",
+                    "for key, value in d.items():",
+                    "    for sub_key, sub_val in value.items():",
+                    "        print(f'{key}.{sub_key}', sub_val)",
+                    "# prints: a.b 1,  a.c 2",
+                ],
+                "watch_out": (
+                    "This only works for one level of nesting. "
+                    "For arbitrarily deep dicts you would need a recursive approach."
+                ),
+            },
+            {
+                "title": "f-Strings for Building Compound Keys",
+                "explanation": (
+                    "f'{key}.{sub_key}' is the cleanest way to build the dotted key. "
+                    "It is equivalent to key + '.' + sub_key but more readable."
+                ),
+                "examples": [
+                    "key, sub_key = 'a', 'b'",
+                    "f'{key}.{sub_key}'       # 'a.b'",
+                    "key + '.' + sub_key      # 'a.b' — same result",
+                ],
+                "watch_out": (
+                    "If a key already contains a dot (e.g. 'a.x'), the output can be ambiguous. "
+                    "For production code, consider using a separator that cannot appear in keys."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#dict.items",
+    },
+
+    # ──────────────────────────────────────────────
+    # SCRIPTING — BEGINNER (batch 4)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "validate-email",
+        "topic": "scripting",
+        "difficulty": "beginner",
+        "language": "python",
+        "title": "Simple Email Validator",
+        "description": (
+            "Write a function called `solution` that takes a string and returns True if it "
+            "looks like a valid email address, False otherwise.\n\n"
+            "Rules:\n"
+            "  - Contains exactly one '@'\n"
+            "  - The part after '@' contains at least one '.'\n"
+            "  - No spaces anywhere\n"
+            "  - Not empty before '@' or after the last '.'\n\n"
+            "Example:\n  solution('user@example.com') → True\n  solution('invalid') → False"
+        ),
+        "starter_code": "def solution(email: str) -> bool:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": 'solution("user@example.com")',  "expected_output": "True"},
+            {"input": 'solution("invalid")',           "expected_output": "False"},
+            {"input": 'solution("no@dot")',            "expected_output": "False"},
+            {"input": 'solution("two@@at.com")',       "expected_output": "False"},
+            {"input": 'solution("a @b.com")',          "expected_output": "False"},
+        ],
+        "hint": "Split on '@'. Check you get exactly two parts. Then check the second part contains a dot, and neither side is empty.",
+        "solution": (
+            "def solution(email: str) -> bool:\n"
+            "    if ' ' in email:\n"
+            "        return False\n"
+            "    parts = email.split('@')\n"
+            "    if len(parts) != 2:\n"
+            "        return False\n"
+            "    local, domain = parts\n"
+            "    if not local or not domain:\n"
+            "        return False\n"
+            "    if '.' not in domain:\n"
+            "        return False\n"
+            "    return True"
+        ),
+        "concepts": [
+            {
+                "title": "Guard Clauses for Validation",
+                "explanation": (
+                    "Validation functions are a perfect fit for guard clauses. "
+                    "Check each rule and return False early. "
+                    "The happy path — return True — sits cleanly at the end."
+                ),
+                "examples": [
+                    "if ' ' in email: return False",
+                    "if len(parts) != 2: return False",
+                    "if not local: return False",
+                    "if '.' not in domain: return False",
+                    "return True  # all checks passed",
+                ],
+                "watch_out": (
+                    "Order matters. Check for spaces before splitting, "
+                    "because a space could interfere with other checks."
+                ),
+            },
+            {
+                "title": "str.split(sep) and Checking the Result Length",
+                "explanation": (
+                    "email.split('@') splits on every '@'. "
+                    "A valid email has exactly one '@', so the result should have exactly 2 parts."
+                ),
+                "examples": [
+                    '"user@example.com".split("@")   # ["user", "example.com"]  — len 2',
+                    '"two@@at.com".split("@")        # ["two", "", "at.com"]    — len 3',
+                    '"invalid".split("@")            # ["invalid"]              — len 1',
+                ],
+                "watch_out": (
+                    "len(parts) != 2 catches both missing '@' and multiple '@'. "
+                    "This single check replaces two separate conditions."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/stdtypes.html#str.split",
+    },
+
+    # ──────────────────────────────────────────────
+    # SCRIPTING — INTERMEDIATE (batch 3)
+    # ──────────────────────────────────────────────
+
+    {
+        "id": "template-filler",
+        "topic": "scripting",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Simple Template Engine",
+        "description": (
+            "Write a function called `solution` that takes a template string and a dict, "
+            "and replaces every {{key}} placeholder with the corresponding value from the dict.\n\n"
+            "Example:\n  solution('Hello {{name}}!', {'name': 'Mario'}) → 'Hello Mario!'\n"
+            "  solution('{{a}} + {{b}} = {{c}}', {'a':'1','b':'2','c':'3'}) → '1 + 2 = 3'"
+        ),
+        "starter_code": "def solution(template: str, context: dict) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {
+                "input": "solution('Hello {{name}}!', {'name': 'Mario'})",
+                "expected_output": "Hello Mario!",
+            },
+            {
+                "input": "solution('{{a}} + {{b}} = {{c}}', {'a': '1', 'b': '2', 'c': '3'})",
+                "expected_output": "1 + 2 = 3",
+            },
+            {
+                "input": "solution('No placeholders', {})",
+                "expected_output": "No placeholders",
+            },
+        ],
+        "hint": "Loop over the context dict and call str.replace('{{key}}', value) for each pair.",
+        "solution": (
+            "def solution(template: str, context: dict) -> str:\n"
+            "    for key, value in context.items():\n"
+            "        template = template.replace('{{' + key + '}}', value)\n"
+            "    return template"
+        ),
+        "concepts": [
+            {
+                "title": "str.replace() for Templating",
+                "explanation": (
+                    "Iterating the context dict and calling replace() for each key is the simplest "
+                    "template engine you can write. Each pass substitutes one placeholder."
+                ),
+                "examples": [
+                    "t = 'Hello {{name}}, you are {{age}}!'",
+                    "t = t.replace('{{name}}', 'Alice')",
+                    "# t = 'Hello Alice, you are {{age}}!'",
+                    "t = t.replace('{{age}}', '30')",
+                    "# t = 'Hello Alice, you are 30!'",
+                ],
+                "watch_out": (
+                    "replace() mutates the template string step by step. "
+                    "Reassign: template = template.replace(...). "
+                    "Without the reassignment the original string stays unchanged."
+                ),
+            },
+            {
+                "title": "String Concatenation for Dynamic Patterns",
+                "explanation": (
+                    "'{{' + key + '}}' builds the placeholder string at runtime. "
+                    "This is cleaner than f'{{{{' + key + '}}}}' (double-brace escaping)."
+                ),
+                "examples": [
+                    "key = 'name'",
+                    "'{{' + key + '}}'     # '{{name}}'",
+                    "f'{{{{{key}}}}}'      # '{{name}}' — f-string version (harder to read)",
+                ],
+                "watch_out": (
+                    "In f-strings, {{ means a literal { and }} means a literal }. "
+                    "String concatenation avoids the confusion entirely."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/library/string.html#template-strings",
+    },
+
+    {
+        "id": "number-to-roman",
+        "topic": "scripting",
+        "difficulty": "intermediate",
+        "language": "python",
+        "title": "Number to Roman Numerals",
+        "description": (
+            "Write a function called `solution` that converts a positive integer (1–3999) "
+            "to its Roman numeral representation.\n\n"
+            "Example:\n  solution(3) → 'III'\n  solution(4) → 'IV'\n  solution(1994) → 'MCMXCIV'"
+        ),
+        "starter_code": "def solution(n: int) -> str:\n    # Your code here\n    pass",
+        "test_cases": [
+            {"input": "solution(3)",    "expected_output": "III"},
+            {"input": "solution(4)",    "expected_output": "IV"},
+            {"input": "solution(9)",    "expected_output": "IX"},
+            {"input": "solution(58)",   "expected_output": "LVIII"},
+            {"input": "solution(1994)", "expected_output": "MCMXCIV"},
+        ],
+        "hint": "Build a table of value→symbol pairs in descending order. Repeatedly subtract the largest value that fits and append its symbol.",
+        "solution": (
+            "def solution(n: int) -> str:\n"
+            "    table = [\n"
+            "        (1000,'M'),(900,'CM'),(500,'D'),(400,'CD'),\n"
+            "        (100,'C'),(90,'XC'),(50,'L'),(40,'XL'),\n"
+            "        (10,'X'),(9,'IX'),(5,'V'),(4,'IV'),(1,'I'),\n"
+            "    ]\n"
+            "    result = ''\n"
+            "    for value, symbol in table:\n"
+            "        while n >= value:\n"
+            "            result += symbol\n"
+            "            n -= value\n"
+            "    return result"
+        ),
+        "concepts": [
+            {
+                "title": "Greedy Algorithm — Always Take the Largest That Fits",
+                "explanation": (
+                    "Work through the value table from largest to smallest. "
+                    "While n >= current value, subtract that value and append its symbol. "
+                    "This greedy approach produces the correct Roman numeral."
+                ),
+                "examples": [
+                    "# n = 1994:",
+                    "1994 >= 1000 → 'M',   n=994",
+                    " 994 >= 900  → 'CM',  n=94",
+                    "  94 >= 90   → 'XC',  n=4",
+                    "   4 >= 4    → 'IV',  n=0",
+                    "# Result: 'MCMXCIV'",
+                ],
+                "watch_out": (
+                    "The subtractive cases (IV=4, IX=9, XL=40, etc.) must be in the table. "
+                    "Without them, 4 would become 'IIII' instead of 'IV'."
+                ),
+            },
+            {
+                "title": "A Lookup Table as a List of Tuples",
+                "explanation": (
+                    "A list of (value, symbol) tuples is ideal here — it preserves order "
+                    "and is easy to iterate. A dict would lose the ordering guarantee needed "
+                    "for the greedy pass."
+                ),
+                "examples": [
+                    "table = [(1000,'M'), (900,'CM'), ..., (1,'I')]",
+                    "for value, symbol in table:",
+                    "    while n >= value:",
+                    "        result += symbol; n -= value",
+                ],
+                "watch_out": (
+                    "Order is critical — the table MUST be descending. "
+                    "Iterating in ascending order would produce wrong results."
+                ),
+            },
+        ],
+        "docs_url": "https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences",
+    },
+
 ]

@@ -1,0 +1,288 @@
+/* ============================================
+   WARM CRAFT THEME — Light mode
+   Earthy browns, creams, warm oranges
+   ============================================ */
+
+:root {
+  --warm-bg: #f7f3ed;
+  --warm-bg-alt: #fdfcfa;
+  --warm-card-bg: #ffffff;
+  --warm-card-border: #e8dfd0;
+  --warm-primary: #d97845;
+  --warm-primary-hover: #c2672d;
+  --warm-primary-light: rgba(217, 120, 69, 0.15);
+  --warm-primary-border: rgba(217, 120, 69, 0.3);
+  --warm-text: #3d2f1f;
+  --warm-text-muted: #8b7355;
+  --warm-accent: #e09f5f;
+  --warm-accent-light: rgba(224, 159, 95, 0.1);
+  --warm-accent-border: rgba(224, 159, 95, 0.3);
+  --warm-success: #6b8e4e;
+  --warm-success-light: rgba(107, 142, 78, 0.15);
+  --warm-success-border: rgba(107, 142, 78, 0.3);
+  --warm-danger: #c0392b;
+  --warm-danger-light: rgba(192, 57, 43, 0.1);
+  --warm-danger-border: rgba(192, 57, 43, 0.25);
+  --warm-editor-bg: #2b2a27;
+  --warm-shadow-sm: 0 1px 3px rgba(61, 47, 31, 0.08);
+  --warm-shadow-md: 0 2px 8px rgba(217, 120, 69, 0.25);
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+
+body.theme-warm-craft {
+  background: var(--warm-bg);
+  color: var(--warm-text);
+}
+
+/* ============================================
+   SCROLLBARS
+   ============================================ */
+
+body.theme-warm-craft ::-webkit-scrollbar-track {
+  background: var(--warm-bg);
+}
+body.theme-warm-craft ::-webkit-scrollbar-thumb {
+  background: #c4b5a0;
+  border-radius: 4px;
+}
+body.theme-warm-craft ::-webkit-scrollbar-thumb:hover {
+  background: #a89282;
+}
+
+/* ============================================
+   NAVBAR / HEADER
+   ============================================ */
+
+body.theme-warm-craft header {
+  background: rgba(253, 252, 250, 0.92) !important;
+  border-color: var(--warm-card-border) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* ============================================
+   TAILWIND COLOR OVERRIDES
+   (covers all zinc / violet classes used in the app)
+   ============================================ */
+
+/* Backgrounds */
+body.theme-warm-craft .bg-zinc-950,
+body.theme-warm-craft .bg-zinc-900 {
+  background-color: var(--warm-card-bg) !important;
+}
+
+body.theme-warm-craft .bg-zinc-800 {
+  background-color: #ede8e0 !important;
+}
+
+body.theme-warm-craft .bg-zinc-700 {
+  background-color: #ddd4c6 !important;
+}
+
+/* Opacity-suffixed variants */
+body.theme-warm-craft [class*="bg-zinc-950\/"],
+body.theme-warm-craft [class*="bg-zinc-900\/"] {
+  background-color: rgba(253, 252, 250, 0.85) !important;
+}
+
+/* Borders */
+body.theme-warm-craft .border-zinc-800,
+body.theme-warm-craft [class*="border-zinc-800\/"],
+body.theme-warm-craft .border-zinc-700 {
+  border-color: var(--warm-card-border) !important;
+}
+
+/* Text */
+body.theme-warm-craft .text-zinc-50 {
+  color: var(--warm-text) !important;
+}
+body.theme-warm-craft .text-zinc-100,
+body.theme-warm-craft .text-zinc-200 {
+  color: #4a3828 !important;
+}
+body.theme-warm-craft .text-zinc-300 {
+  color: #6b5342 !important;
+}
+body.theme-warm-craft .text-zinc-400,
+body.theme-warm-craft .text-zinc-500 {
+  color: var(--warm-text-muted) !important;
+}
+body.theme-warm-craft .text-zinc-600 {
+  color: #b09880 !important;
+}
+
+/* Violet → warm orange */
+body.theme-warm-craft .bg-violet-600 {
+  background-color: var(--warm-primary) !important;
+}
+body.theme-warm-craft .hover\:bg-violet-500:hover {
+  background-color: var(--warm-primary-hover) !important;
+}
+body.theme-warm-craft .text-violet-400,
+body.theme-warm-craft .text-violet-300 {
+  color: var(--warm-primary) !important;
+}
+body.theme-warm-craft .border-violet-500,
+body.theme-warm-craft [class*="border-violet-500\/"] {
+  border-color: var(--warm-primary) !important;
+}
+body.theme-warm-craft [class*="bg-violet-950\/"],
+body.theme-warm-craft [class*="ring-violet-500\/"] {
+  background-color: var(--warm-primary-light) !important;
+  --tw-ring-color: var(--warm-primary-border) !important;
+}
+body.theme-warm-craft .bg-violet-600\/20 {
+  background-color: var(--warm-primary-light) !important;
+}
+body.theme-warm-craft [class*="border-violet-500\/"] {
+  border-color: var(--warm-primary-border) !important;
+}
+
+/* Emerald → olive success */
+body.theme-warm-craft .text-emerald-400 {
+  color: var(--warm-success) !important;
+}
+body.theme-warm-craft [class*="bg-emerald-950\/"] {
+  background-color: var(--warm-success-light) !important;
+}
+body.theme-warm-craft [class*="border-emerald-800\/"] {
+  border-color: var(--warm-success-border) !important;
+}
+
+/* Red errors */
+body.theme-warm-craft .text-red-400 {
+  color: var(--warm-danger) !important;
+}
+body.theme-warm-craft [class*="bg-red-950\/"] {
+  background-color: var(--warm-danger-light) !important;
+}
+body.theme-warm-craft [class*="border-red-800\/"] {
+  border-color: var(--warm-danger-border) !important;
+}
+
+/* Dividers / separators */
+body.theme-warm-craft .bg-zinc-700,
+body.theme-warm-craft .h-px.bg-zinc-700 {
+  background-color: var(--warm-card-border) !important;
+}
+
+/* ============================================
+   COMPONENT CLASSES
+   ============================================ */
+
+body.theme-warm-craft .card {
+  background: var(--warm-card-bg) !important;
+  border-color: var(--warm-card-border) !important;
+}
+body.theme-warm-craft .card:hover {
+  border-color: #d4c5af !important;
+}
+
+body.theme-warm-craft .btn-primary {
+  background: var(--warm-primary) !important;
+  color: white !important;
+  box-shadow: var(--warm-shadow-md) !important;
+}
+body.theme-warm-craft .btn-primary:hover:not(:disabled) {
+  background: var(--warm-primary-hover) !important;
+}
+
+body.theme-warm-craft .btn-ghost {
+  color: var(--warm-text-muted) !important;
+}
+body.theme-warm-craft .btn-ghost:hover {
+  color: var(--warm-text) !important;
+  background: rgba(61, 47, 31, 0.06) !important;
+}
+
+body.theme-warm-craft .btn-outline {
+  border-color: var(--warm-card-border) !important;
+  color: var(--warm-text-muted) !important;
+}
+body.theme-warm-craft .btn-outline:hover {
+  color: var(--warm-text) !important;
+  border-color: #c4b5a0 !important;
+  background: rgba(61, 47, 31, 0.04) !important;
+}
+
+/* ============================================
+   DIFFICULTY BADGES
+   ============================================ */
+
+body.theme-warm-craft [class*="difficulty-badge"],
+body.theme-warm-craft .badge-beginner {
+  background: var(--warm-success-light) !important;
+  color: var(--warm-success) !important;
+  border-color: var(--warm-success-border) !important;
+}
+body.theme-warm-craft .badge-intermediate {
+  background: var(--warm-accent-light) !important;
+  color: #b87a3d !important;
+  border-color: var(--warm-accent-border) !important;
+}
+body.theme-warm-craft .badge-advanced {
+  background: var(--warm-primary-light) !important;
+  color: var(--warm-primary) !important;
+  border-color: var(--warm-primary-border) !important;
+}
+
+/* ============================================
+   OUTPUT / CODE PANELS
+   ============================================ */
+
+body.theme-warm-craft .font-mono,
+body.theme-warm-craft pre,
+body.theme-warm-craft code {
+  background: transparent;
+}
+
+/* ============================================
+   PROGRESS BARS (gradient override)
+   ============================================ */
+
+body.theme-warm-craft .from-violet-600 {
+  --tw-gradient-from: var(--warm-primary) !important;
+}
+body.theme-warm-craft .to-violet-400 {
+  --tw-gradient-to: var(--warm-accent) !important;
+}
+
+/* ============================================
+   GRADIENT TEXT (landing / headings)
+   ============================================ */
+
+body.theme-warm-craft .gradient-text {
+  background-image: linear-gradient(to right, var(--warm-primary), var(--warm-accent)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* ============================================
+   INPUT / CHECKBOX
+   ============================================ */
+
+body.theme-warm-craft input[type="checkbox"] {
+  accent-color: var(--warm-primary);
+}
+
+/* ============================================
+   KBD hint
+   ============================================ */
+
+body.theme-warm-craft kbd {
+  color: var(--warm-text-muted) !important;
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+
+body.theme-warm-craft a:not(.btn-primary):not(.btn-ghost):not(.btn-outline) {
+  color: var(--warm-primary);
+}
+body.theme-warm-craft a:not(.btn-primary):not(.btn-ghost):not(.btn-outline):hover {
+  color: var(--warm-primary-hover);
+}

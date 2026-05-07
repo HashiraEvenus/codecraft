@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Play, FlaskConical, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, Play, FlaskConical, CheckCircle2, XCircle, Loader2, ChevronRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Editor from "../components/Editor";
 import OutputPanel from "../components/OutputPanel";
@@ -8,7 +8,15 @@ import ChallengePanel from "../components/ChallengePanel";
 import DifficultyBadge from "../components/DifficultyBadge";
 import { api } from "../lib/api";
 import { useProgress } from "../hooks/useProgress";
+import { CURRICULUM } from "../lib/curriculum";
 import type { Challenge, ExecutionResult, TestSummary } from "../types";
+
+function getNextPathId(currentId: string): string | null {
+  const allIds = CURRICULUM.flatMap((s) => s.challengeIds);
+  const idx = allIds.indexOf(currentId);
+  if (idx === -1 || idx >= allIds.length - 1) return null;
+  return allIds[idx + 1];
+}
 
 export default function ChallengePage() {
   const { state } = useLocation() as { state: { challenge: Challenge } | null };
@@ -17,13 +25,49 @@ export default function ChallengePage() {
 
   const challenge: Challenge | null = state?.challenge ?? null;
 
-  const [code, setCode] = useState(challenge?.starter_code ?? "");
+  const [code, setCode] = useState(() => {
+    if (!challenge) return "";
+    try {
+      return localStorage.getItem(`codecraft:code:${challenge.id}`) ?? challenge.starter_code;
+    } catch {
+      return challenge.starter_code;
+    }
+  });
+
   const [runResult, setRunResult] = useState<ExecutionResult | null>(null);
   const [testResult, setTestResult] = useState<TestSummary | null>(null);
   const [outputMode, setOutputMode] = useState<"run" | "test">("run");
   const [isRunning, setIsRunning] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "pass" | "fail">("idle");
+  const [loadingNext, setLoadingNext] = useState(false);
+
+  // Debounce-save code to localStorage whenever it changes
+  useEffect(() => {
+    if (!challenge) return;
+    const key = `codecraft:code:${challenge.id}`;
+    const timer = setTimeout(() => {
+      try { localStorage.setItem(key, code); } catch {}
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [code, challenge?.id]);
+
+  // Reset all state when navigating challenge → challenge (same route, new state)
+  const prevIdRef = useRef(challenge?.id);
+  useEffect(() => {
+    if (!challenge || challenge.id === prevIdRef.current) return;
+    prevIdRef.current = challenge.id;
+    try {
+      setCode(localStorage.getItem(`codecraft:code:${challenge.id}`) ?? challenge.starter_code);
+    } catch {
+      setCode(challenge.starter_code);
+    }
+    setRunResult(null);
+    setTestResult(null);
+    setOutputMode("run");
+    setShowSolution(false);
+    setSubmitStatus("idle");
+  }, [challenge?.id]);
 
   if (!challenge) {
     return (
@@ -49,6 +93,19 @@ export default function ChallengePage() {
       setRunResult({ stdout: "", stderr: "Execution service unavailable.", exit_code: 1 });
     } finally {
       setIsRunning(false);
+    }
+  }
+
+  const nextPathId = getNextPathId(challenge.id);
+
+  async function handleNextChallenge() {
+    if (!nextPathId || loadingNext) return;
+    setLoadingNext(true);
+    try {
+      const next = await api.getChallenge(nextPathId);
+      navigate("/challenge", { state: { challenge: next } });
+    } catch {
+      setLoadingNext(false);
     }
   }
 
@@ -100,6 +157,16 @@ export default function ChallengePage() {
             All tests passed!
           </div>
         )}
+        {submitStatus === "pass" && nextPathId && (
+          <button
+            onClick={handleNextChallenge}
+            disabled={loadingNext}
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg btn-primary disabled:opacity-60"
+          >
+            {loadingNext ? <Loader2 className="h-3 w-3 animate-spin" /> : <ChevronRight className="h-3 w-3" />}
+            Next Challenge
+          </button>
+        )}
         {submitStatus !== "pass" && isCompleted(challenge.id) && (
           <div className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 px-2.5 py-1 rounded-full">
             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -117,6 +184,7 @@ export default function ChallengePage() {
           <button
             onClick={handleRun}
             disabled={isRunning}
+            title="Run code (Ctrl+Enter)"
             className="flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
           >
             {isRunning && outputMode === "run" ? (
@@ -125,6 +193,7 @@ export default function ChallengePage() {
               <Play className="h-3.5 w-3.5 text-emerald-400" />
             )}
             Run
+            <kbd className="hidden sm:inline text-xs text-zinc-600 font-mono">⌘↵</kbd>
           </button>
           <button
             onClick={handleSubmit}
@@ -156,7 +225,7 @@ export default function ChallengePage() {
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Editor — takes available space */}
           <div className="flex-1 overflow-hidden">
-            <Editor language={challenge.language} value={code} onChange={setCode} />
+            <Editor language={challenge.language} value={code} onChange={setCode} onRun={handleRun} />
           </div>
 
           {/* Output panel */}

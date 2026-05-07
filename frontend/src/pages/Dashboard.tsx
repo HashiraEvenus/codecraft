@@ -210,9 +210,15 @@ export default function Dashboard() {
         {/* Stats footer */}
         <div className="text-center text-xs text-zinc-600 space-y-2">
           <div>{progress.totalCompleted} total challenges completed</div>
-          <Link to="/library" className="text-violet-400 hover:text-violet-300 transition-colors">
-            Track progress in the exercise library
-          </Link>
+          <div className="flex items-center justify-center gap-4">
+            <Link to="/learn" className="text-violet-400 hover:text-violet-300 transition-colors">
+              View learning path
+            </Link>
+            <span className="text-zinc-700">·</span>
+            <Link to="/library" className="text-violet-400 hover:text-violet-300 transition-colors">
+              Browse library
+            </Link>
+          </div>
         </div>
       </main>
     </div>

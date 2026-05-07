@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Code2 } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 interface NavbarProps {
   rightSlot?: React.ReactNode;
@@ -19,9 +20,14 @@ export default function Navbar({ rightSlot }: NavbarProps) {
         </Link>
 
         <nav className="flex items-center gap-1">
-          {pathname !== "/" && (
+          {pathname !== "/" && pathname !== "/dashboard" && (
             <Link to="/dashboard" className="btn-ghost text-sm">
               Dashboard
+            </Link>
+          )}
+          {pathname !== "/" && pathname !== "/learn" && (
+            <Link to="/learn" className="btn-ghost text-sm">
+              Path
             </Link>
           )}
           {pathname !== "/" && pathname !== "/library" && (
@@ -29,7 +35,13 @@ export default function Navbar({ rightSlot }: NavbarProps) {
               Library
             </Link>
           )}
+          {pathname !== "/" && pathname !== "/stats" && (
+            <Link to="/stats" className="btn-ghost text-sm">
+              Stats
+            </Link>
+          )}
           {rightSlot}
+          <ThemeToggle />
           {pathname === "/" && (
             <Link to="/dashboard" className="btn-primary text-sm">
               Start Coding
